@@ -17,11 +17,21 @@ export const Header = () => {
         <div>
           <nav>
             <ul>
-              <li>メニュー</li>
-              <li>ショップ</li>
-              <li>お気に入り</li>
-              <li>注文履歴</li>
-              <li>ログイン</li>
+              <Link to="/">
+                <li>メニュー</li>
+              </Link>
+              <Link to="/shops">
+                <li>ショップ</li>
+              </Link>
+              <Link to="/favorites">
+                <li>お気に入り</li>
+              </Link>
+              <Link to="/order_history">
+                <li>注文履歴</li>
+              </Link>
+              <Link to="/login">
+                <li>ログイン</li>
+              </Link>
             </ul>
           </nav>
         </div>
