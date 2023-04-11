@@ -8,19 +8,26 @@ import { OrderHistory } from "./features/order/OrderHistory";
 import { Login } from "./features/login/Login";
 import { Concept } from "./features/concept/Concept";
 import { InquiryForm } from "./features/inquiry/InquiryForm";
+import SingleMenuPage from "./features/menu/SingleMenuPage";
+import Navigation from "./components/Nav";
 
 function App() {
   return (
     <Router>
       <div className="app">
         <Routes>
-          <Route path="/" element={<MenuList />} />
-          <Route path="/shops" element={<ShopList />} />
-          <Route path="/favorites" element={<FavoriteShopList />} />
-          <Route path="/order_history" element={<OrderHistory />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/concept" element={<Concept />} />
-          <Route path="/inquiry_form" element={<InquiryForm />} />
+          <Route path="/" element={<Navigation />}>
+            <Route path="items">
+              <Route index element={<MenuList />} />
+              <Route path=":itemId" element={<SingleMenuPage />} />
+            </Route>
+            <Route path="/shops" element={<ShopList />} />
+            <Route path="/favorites" element={<FavoriteShopList />} />
+            <Route path="/order_history" element={<OrderHistory />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/concept" element={<Concept />} />
+            <Route path="/inquiry_form" element={<InquiryForm />} />
+          </Route>
         </Routes>
       </div>
     </Router>

@@ -17,6 +17,16 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    getMenuById: builder.query({
+      query: (itemId) => ({
+        url: `/items?id=eq.${itemId}`,
+        method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
     getShops: builder.query({
       query: () => ({
         url: "/shops",
@@ -27,7 +37,22 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    getShopById: builder.query({
+      query: (shopId) => ({
+        url: `/shops?id=eq.${shopId}`,
+        method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetMenusQuery, useGetShopsQuery } = apiSlice;
+export const {
+  useGetMenusQuery,
+  useGetMenuByIdQuery,
+  useGetShopsQuery,
+  useGetShopByIdQuery,
+} = apiSlice;

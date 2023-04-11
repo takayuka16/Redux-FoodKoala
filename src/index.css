@@ -23,20 +23,23 @@ a {
   object-fit: cover;
 }
 
-.shop img {
+.shop img,
+.menu img {
   width: 15rem;
   height: 15rem;
   object-fit: cover;
 }
 
 /* メニューリストのCSS */
-.menu_list {
+.menu_list,
+.shop_list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 /* メニューカードのCSS */
-.menu_card {
+.menu_card,
+.shop_card {
   margin: 3% 2% 0 2%;
 }

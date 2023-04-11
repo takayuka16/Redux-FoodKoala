@@ -1,5 +1,3 @@
-import { Footer } from "../../components/Footer";
-import { Header } from "../../components/Header";
 import * as React from "react";
 import { useGetMenusQuery } from "../api/apiSlice";
 import MenuCard from "../../components/MenuCard";
@@ -34,11 +32,5 @@ export const MenuList = () => {
     content = <div>{error.toString()}</div>;
   }
 
-  return (
-    <>
-      <Header />
-      <div className="menu_list">{content}</div>
-      <Footer />
-    </>
-  );
+  return <div className="menu_list">{content}</div>;
 };
