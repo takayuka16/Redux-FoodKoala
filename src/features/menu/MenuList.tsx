@@ -1,8 +1,11 @@
 import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
 import * as React from "react";
-import Button from "@mui/material/Button";
 import { useGetMenusQuery } from "../api/apiSlice";
+import MenuCard from "../../components/MenuCard";
+import { Menu } from "../../types/menus.type";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query/fetchBaseQuery";
+import { SerializedError } from "@reduxjs/toolkit/dist/createAsyncThunk";
 
 export const MenuList = () => {
   const {
@@ -11,30 +14,30 @@ export const MenuList = () => {
     isSuccess,
     isError,
     error,
-  } = useGetMenusQuery("");
+  } = useGetMenusQuery("") as Data;
 
-  const renderedMenu = menus.map((menu: any) => (
-    <li key={menu.id}>{menu.name}</li>
-  ));
+  interface Data {
+    data: Menu[];
+    isLoading: Boolean;
+    isSuccess: Boolean;
+    isError: Boolean;
+    error: FetchBaseQueryError | SerializedError | undefined;
+  }
 
   let content;
 
   if (isLoading) {
     content = <div>Loading now...</div>;
   } else if (isSuccess) {
-    content = <div>{renderedMenu}</div>;
-  } else if (isError) {
+    content = <MenuCard menuData={menus} />;
+  } else if (isError && error) {
     content = <div>{error.toString()}</div>;
   }
 
   return (
     <>
       <Header />
-      <h1>メニュー一覧</h1>
-      <div>
-        {content}
-        <Button variant="outlined">Hello World</Button>
-      </div>
+      <div className="menu_list">{content}</div>
       <Footer />
     </>
   );

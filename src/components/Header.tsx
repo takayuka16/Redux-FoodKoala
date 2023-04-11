@@ -11,8 +11,14 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import { Link } from "react-router-dom";
 
-const pages = ["メニュー", "ショップ", "お気に入り", "注文履歴"];
+const pages = [
+  { name: "メニュー", path: "/" },
+  { name: "ショップ", path: "/shops" },
+  { name: "お気に入り", path: "/favorites" },
+  { name: "注文履歴", path: "order_history" },
+];
 const settings = ["Profile", "Login", "Logout"];
 
 export function Header() {
@@ -39,7 +45,7 @@ export function Header() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" color="transparent">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -59,6 +65,7 @@ export function Header() {
             }}
           >
             <img
+              className="logo_img"
               src="/images/header_logo.png"
               alt="header-logo"
               width={140}
@@ -94,9 +101,11 @@ export function Header() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+              {pages.map((page, index) => (
+                <MenuItem key={index} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">
+                    <Link to={page.path}>{page.name}</Link>
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -125,13 +134,13 @@ export function Header() {
             />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {pages.map((page, index) => (
               <Button
-                key={page}
+                key={index}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "black", display: "block" }}
               >
-                {page}
+                <Link to={page.path}>{page.name}</Link>
               </Button>
             ))}
           </Box>
@@ -170,45 +179,3 @@ export function Header() {
     </AppBar>
   );
 }
-
-// import { Link } from "react-router-dom";
-
-// export const Header = () => {
-//   return (
-//     <>
-//       <header>
-//         <div>
-//           <Link to="/">
-//             <img
-//               src="/images/header_logo.png"
-//               alt="header-logo"
-//               width={170}
-//               height={170}
-//             />
-//           </Link>
-//         </div>
-//         <div>
-//           <nav>
-//             <ul>
-//               <Link to="/">
-//                 <li>メニュー</li>
-//               </Link>
-//               <Link to="/shops">
-//                 <li>ショップ</li>
-//               </Link>
-//               <Link to="/favorites">
-//                 <li>お気に入り</li>
-//               </Link>
-//               <Link to="/order_history">
-//                 <li>注文履歴</li>
-//               </Link>
-//               <Link to="/login">
-//                 <li>ログイン</li>
-//               </Link>
-//             </ul>
-//           </nav>
-//         </div>
-//       </header>
-//     </>
-//   );
-// };

@@ -7,17 +7,18 @@ import Typography from "@mui/material/Typography";
 export function Footer() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" color="transparent">
         <Toolbar>
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/concept"
             sx={{
               mr: 2,
               flexGrow: 0,
               fontFamily: "monospace",
+              fontWeight: 700,
               color: "inherit",
               textDecoration: "none",
             }}
@@ -28,11 +29,12 @@ export function Footer() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/inquiry_form"
             sx={{
               mr: 2,
               flexGrow: 0,
               fontFamily: "monospace",
+              fontWeight: 700,
               color: "inherit",
               textDecoration: "none",
             }}
