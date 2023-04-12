@@ -189,13 +189,13 @@ export function Header() {
               {auth.length > 0 ? (
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">
-                    <Link to="/login">ログイン</Link>
+                    <Link to="/login">ログアウト</Link>
                   </Typography>
                 </MenuItem>
               ) : (
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">
-                    <Link to="/login">ログアウト</Link>
+                    <Link to="/login">ログイン</Link>
                   </Typography>
                 </MenuItem>
               )}

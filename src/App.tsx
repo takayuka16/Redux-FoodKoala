@@ -5,12 +5,13 @@ import { MenuList } from "./features/menu/MenuList";
 import { ShopList } from "./features/shop/ShopList";
 import { FavoriteShopList } from "./features/shop/FavoriteShopList";
 import { OrderHistory } from "./features/order/OrderHistory";
-import { Login } from "./features/login/Login";
+import { Login } from "./features/Login";
 import { Concept } from "./features/concept/Concept";
 import { InquiryForm } from "./features/inquiry/InquiryForm";
 import SingleMenuPage from "./features/menu/SingleMenuPage";
 import Navigation from "./components/Nav";
 import { SingleShopPage } from "./features/shop/SingleShopPage";
+import Signup from "./features/SignUp";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/favorites" element={<FavoriteShopList />} />
             <Route path="/order_history" element={<OrderHistory />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signUp" element={<Signup />} />
             <Route path="/concept" element={<Concept />} />
             <Route path="/inquiry_form" element={<InquiryForm />} />
           </Route>
