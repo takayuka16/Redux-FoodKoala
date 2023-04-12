@@ -10,6 +10,7 @@ import { Concept } from "./features/concept/Concept";
 import { InquiryForm } from "./features/inquiry/InquiryForm";
 import SingleMenuPage from "./features/menu/SingleMenuPage";
 import Navigation from "./components/Nav";
+import { SingleShopPage } from "./features/shop/SingleShopPage";
 
 function App() {
   return (
@@ -21,7 +22,10 @@ function App() {
               <Route index element={<MenuList />} />
               <Route path=":itemId" element={<SingleMenuPage />} />
             </Route>
-            <Route path="/shops" element={<ShopList />} />
+            <Route path="shops">
+              <Route index element={<ShopList />} />
+              <Route path=":shopId" element={<SingleShopPage />} />
+            </Route>
             <Route path="/favorites" element={<FavoriteShopList />} />
             <Route path="/order_history" element={<OrderHistory />} />
             <Route path="/login" element={<Login />} />

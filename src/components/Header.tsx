@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const pages = [
   { name: "メニュー", path: "/items" },
@@ -19,15 +20,25 @@ const pages = [
   { name: "お気に入り", path: "/favorites" },
   { name: "注文履歴", path: "order_history" },
 ];
-const settings = ["Profile", "Login", "Logout"];
+const settings = [{ name: "マイページ", path: "/mypage" }];
 
 export function Header() {
+  const [auth, setAuth] = React.useState("");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  React.useEffect(() => {
+    if (Cookies.get("user_id") === undefined || null) {
+      return;
+    } else {
+      const userId = Cookies.get("user_id");
+      setAuth(userId!);
+    }
+  }, []);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -51,8 +62,7 @@ export function Header() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/items"
+            component="div"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -64,11 +74,13 @@ export function Header() {
               textDecoration: "none",
             }}
           >
-            <img
-              className="logo_img"
-              src="/images/header_logo.png"
-              alt="header-logo"
-            />
+            <Link to="/items">
+              <img
+                className="logo_img"
+                src="/images/header_logo.png"
+                alt="header-logo"
+              />
+            </Link>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -166,10 +178,27 @@ export function Header() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting, index) => (
-                <MenuItem key={index} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">
+                    <Link to={`${setting.path}`} key={index}>
+                      {setting.name}
+                    </Link>
+                  </Typography>
                 </MenuItem>
               ))}
+              {auth.length > 0 ? (
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">
+                    <Link to="/login">ログイン</Link>
+                  </Typography>
+                </MenuItem>
+              ) : (
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">
+                    <Link to="/login">ログアウト</Link>
+                  </Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
         </Toolbar>

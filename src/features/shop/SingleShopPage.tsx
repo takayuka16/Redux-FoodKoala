@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useGetShopByIdQuery } from "../api/apiSlice";
+import { Shop } from "../../types/shops.type";
 
 export const SingleShopPage = () => {
   const { shopId } = useParams();
@@ -17,9 +18,9 @@ export const SingleShopPage = () => {
   if (isLoading) {
     content = <div>Loading now...</div>;
   } else if (isSuccess) {
-    const shop = shopData[0];
+    const shop: Shop = shopData[0];
     content = (
-      <div>
+      <div className="shop">
         <h1>{shop.name}</h1>
         <img src={shop.image_url} alt="ショップ画像" />
         <p>{shop.description}</p>
