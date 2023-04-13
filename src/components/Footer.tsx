@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 
 export function Footer() {
   return (
-    <Box sx={{ flexGrow: 1, mt: 2 }}>
+    <Box sx={{ flexGrow: 1, mt: 4 }}>
       <AppBar position="static" color="transparent">
         <Toolbar sx={{ justifyContent: "end" }}>
           <Typography
