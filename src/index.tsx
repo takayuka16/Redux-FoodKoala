@@ -23,6 +23,11 @@ root.render(
         src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js?ver=5.7.2"
         id="jquery-js"
       ></script>
+      <script
+        async
+        src="https://kit.fontawesome.com/acecca202b.js"
+        crossOrigin="anonymous"
+      ></script>
       <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
