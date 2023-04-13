@@ -1,5 +1,4 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -8,14 +7,12 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import {
-  createTheme,
-  ThemeProvider,
-  useColorScheme,
-} from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import { config } from "../apikey";
 
 function Copyright(props: any) {
   return (
@@ -35,47 +32,40 @@ function Copyright(props: any) {
   );
 }
 
-function ModeToggle() {
-  const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) {
-    return null;
-  }
-
-  return (
-    <Button
-      variant="outlined"
-      onClick={() => {
-        setMode(mode === "light" ? "dark" : "light");
-      }}
-      sx={{ mt: 2, ml: 2 }}
-    >
-      {mode === "light" ? "Turn Dark" : "Turn Light"}
-    </Button>
-  );
-}
-
 const theme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const url = config.SUPABASE_URL;
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const email = data.get("email");
+    const password = data.get("password");
+    console.log("email:", email, "password:", password);
+    await fetch(`${url}/users?email=eq.${email}&password=eq.${password}`, {
+      headers: {
+        apikey: `${config.SUPABASE_ANON_KEY}`,
+        Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.length > 0) {
+          Cookies.set("user_id", data[0].id);
+          navigate("/items");
+        } else {
+          throw new Error("ユーザーが見つかりませんでした");
+        }
+      })
+      .catch((error) => console.error("ログインに失敗しました", error.text()));
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <ModeToggle />
         <Box
           sx={{
             marginTop: 8,
@@ -84,11 +74,13 @@ export default function Login() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <img
+            src="/images/foodkoala_logo.png"
+            alt="Food Koalaのロゴ"
+            className="logo_icon"
+          />
           <Typography component="h1" variant="h5">
-            Sign in
+            ログイン
           </Typography>
           <Box
             component="form"
@@ -101,7 +93,7 @@ export default function Login() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="メールアドレス"
               name="email"
               autoComplete="email"
               autoFocus
@@ -111,7 +103,7 @@ export default function Login() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="パスワード"
               type="password"
               id="password"
               autoComplete="current-password"
@@ -126,17 +118,12 @@ export default function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              ログインして注文する
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/signUp" variant="body2">
+                  {"まだアカウントをお持ちではありませんか？"}
                 </Link>
               </Grid>
             </Grid>

@@ -16,6 +16,13 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <head>
+      <meta name="viewport" content="initial-scale=1, width=device-width" />
+      <meta httpEquiv="Content-Script-Type" content="text/javascript" />
+      <script
+        type="text/javascript"
+        src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js?ver=5.7.2"
+        id="jquery-js"
+      ></script>
       <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
@@ -24,7 +31,6 @@ root.render(
         rel="stylesheet"
         href="https://fonts.googleapis.com/icon?family=Material+Icons"
       />
-      <meta name="viewport" content="initial-scale=1, width=device-width" />
     </head>
     <Provider store={store}>
       <App />

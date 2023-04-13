@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import { config } from "../apikey";
 
 const pages = [
   { name: "メニュー", path: "/items" },
@@ -23,6 +24,9 @@ const pages = [
 const settings = [{ name: "マイページ", path: "/mypage" }];
 
 export function Header() {
+  const userId = Cookies.get("user_id");
+  const url = config.SUPABASE_URL;
+  const [userData, setUserData] = React.useState();
   const [auth, setAuth] = React.useState("");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -32,13 +36,23 @@ export function Header() {
   );
 
   React.useEffect(() => {
-    if (Cookies.get("user_id") === undefined || null) {
+    if (userId === undefined || null) {
       return;
     } else {
-      const userId = Cookies.get("user_id");
       setAuth(userId!);
+      fetch(`${url}/users?id=eq.${userId}`, {
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setUserData(data);
+        });
     }
-  }, []);
+  }, [url, userId]);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -59,6 +73,7 @@ export function Header() {
     <AppBar position="static" color="transparent">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* パソコンのレイアウト */}
           <Typography
             variant="h6"
             noWrap
@@ -82,6 +97,7 @@ export function Header() {
               />
             </Link>
           </Typography>
+          {/* スマホのレイアウト */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -111,7 +127,7 @@ export function Header() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page, index) => (
+              {pages.map((page) => (
                 <Link to={page.path}>
                   <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">{page.name}</Typography>
@@ -143,8 +159,10 @@ export function Header() {
               height={140}
             />
           </Typography>
+
+          {/* パソコンのレイアウト */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page, index) => (
+            {pages.map((page) => (
               <Button
                 key={page.path}
                 onClick={handleCloseNavMenu}
@@ -154,11 +172,17 @@ export function Header() {
               </Button>
             ))}
           </Box>
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                {auth.length > 0 ? (
+                  <Avatar
+                    alt={`${userData[0].name}`}
+                    src="/static/images/avatar/2.jpg"
+                  />
+                ) : (
+                  <Avatar alt="unknown user" src="/images/default_user_icon" />
+                )}
               </IconButton>
             </Tooltip>
             <Menu
