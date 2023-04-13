@@ -6,16 +6,16 @@ import Typography from "@mui/material/Typography";
 
 export function Footer() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
+    <Box sx={{ flexGrow: 1, mt: 2 }}>
+      <AppBar position="static" color="transparent">
+        <Toolbar sx={{ justifyContent: "end" }}>
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/concept"
             sx={{
-              mr: 2,
+              mr: 5,
               flexGrow: 0,
               fontFamily: "monospace",
               color: "inherit",
@@ -28,7 +28,7 @@ export function Footer() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/inquiry_form"
             sx={{
               mr: 2,
               flexGrow: 0,
@@ -44,22 +44,3 @@ export function Footer() {
     </Box>
   );
 }
-
-// import { Link } from "react-router-dom";
-
-// export const Footer = () => {
-//   return (
-//     <>
-//       <footer>
-//         <ul>
-//           <Link to="/concept">
-//             <li>コンセプト</li>
-//           </Link>
-//           <Link to="/inquiry_form">
-//             <li>お問い合わせ</li>
-//           </Link>
-//         </ul>
-//       </footer>
-//     </>
-//   );
-// };

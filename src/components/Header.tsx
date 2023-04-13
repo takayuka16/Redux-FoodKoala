@@ -11,17 +11,48 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
+import { config } from "../apikey";
+import type { User } from "../types/users.type";
 
-const pages = ["メニュー", "ショップ", "お気に入り", "注文履歴"];
-const settings = ["Profile", "Login", "Logout"];
+const pages = [
+  { name: "メニュー", path: "/items" },
+  { name: "ショップ", path: "/shops" },
+  { name: "お気に入り", path: "/favorites" },
+  { name: "注文履歴", path: "order_history" },
+];
+const settings = [{ name: "マイページ", path: "/mypage" }];
 
 export function Header() {
+  const userId = Cookies.get("user_id");
+  const url = config.SUPABASE_URL;
+  const [userData, setUserData] = React.useState<User[]>();
+  const [auth, setAuth] = React.useState("");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  React.useEffect(() => {
+    if (userId === undefined || null) {
+      return;
+    } else {
+      setAuth(userId!);
+      fetch(`${url}/users?id=eq.${userId}`, {
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUserData(data);
+        });
+    }
+  }, [url, userId]);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -39,14 +70,14 @@ export function Header() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" color="transparent">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* パソコンのレイアウト */}
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
+            component="div"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -58,13 +89,15 @@ export function Header() {
               textDecoration: "none",
             }}
           >
-            <img
-              src="/images/header_logo.png"
-              alt="header-logo"
-              width={140}
-              height={140}
-            />
+            <Link to="/items">
+              <img
+                className="logo_img"
+                src="/images/header_logo.png"
+                alt="header-logo"
+              />
+            </Link>
           </Typography>
+          {/* スマホのレイアウト */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -95,9 +128,11 @@ export function Header() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
+                <Link to={page.path}>
+                  <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page.name}</Typography>
+                  </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
@@ -124,22 +159,30 @@ export function Header() {
               height={140}
             />
           </Typography>
+
+          {/* パソコンのレイアウト */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.path}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "black", display: "block" }}
               >
-                {page}
+                <Link to={page.path}>{page.name}</Link>
               </Button>
             ))}
           </Box>
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                {userData === undefined ? (
+                  <Avatar alt="unknown user" src="/images/default_user_icon" />
+                ) : (
+                  <Avatar
+                    alt={`${userData[0].name}`}
+                    src="/static/images/avatar/2.jpg"
+                  />
+                )}
               </IconButton>
             </Tooltip>
             <Menu
@@ -158,11 +201,28 @@ export function Header() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {settings.map((setting, index) => (
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">
+                    <Link to={`${setting.path}`} key={index}>
+                      {setting.name}
+                    </Link>
+                  </Typography>
                 </MenuItem>
               ))}
+              {auth.length > 0 ? (
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">
+                    <Link to="/login">ログアウト</Link>
+                  </Typography>
+                </MenuItem>
+              ) : (
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">
+                    <Link to="/login">ログイン</Link>
+                  </Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
         </Toolbar>
@@ -170,45 +230,3 @@ export function Header() {
     </AppBar>
   );
 }
-
-// import { Link } from "react-router-dom";
-
-// export const Header = () => {
-//   return (
-//     <>
-//       <header>
-//         <div>
-//           <Link to="/">
-//             <img
-//               src="/images/header_logo.png"
-//               alt="header-logo"
-//               width={170}
-//               height={170}
-//             />
-//           </Link>
-//         </div>
-//         <div>
-//           <nav>
-//             <ul>
-//               <Link to="/">
-//                 <li>メニュー</li>
-//               </Link>
-//               <Link to="/shops">
-//                 <li>ショップ</li>
-//               </Link>
-//               <Link to="/favorites">
-//                 <li>お気に入り</li>
-//               </Link>
-//               <Link to="/order_history">
-//                 <li>注文履歴</li>
-//               </Link>
-//               <Link to="/login">
-//                 <li>ログイン</li>
-//               </Link>
-//             </ul>
-//           </nav>
-//         </div>
-//       </header>
-//     </>
-//   );
-// };

@@ -1,41 +1,53 @@
-import { Footer } from "../../components/Footer";
-import { Header } from "../../components/Header";
 import * as React from "react";
-import Button from "@mui/material/Button";
 import { useGetMenusQuery } from "../api/apiSlice";
+import MenuCard from "../../components/MenuCard";
+import { Menu } from "../../types/menus.type";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query/fetchBaseQuery";
+import { SerializedError } from "@reduxjs/toolkit/dist/createAsyncThunk";
+import { Pagination } from "@mui/material";
 
 export const MenuList = () => {
+  const [page, setPage] = React.useState(0);
   const {
     data: menus = [],
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useGetMenusQuery("");
+  } = useGetMenusQuery("") as Data;
 
-  const renderedMenu = menus.map((menu: any) => (
-    <li key={menu.id}>{menu.name}</li>
-  ));
+  interface Data {
+    data: Menu[];
+    isLoading: Boolean;
+    isSuccess: Boolean;
+    isError: Boolean;
+    error: FetchBaseQueryError | SerializedError | undefined;
+  }
 
   let content;
 
   if (isLoading) {
     content = <div>Loading now...</div>;
   } else if (isSuccess) {
-    content = <div>{renderedMenu}</div>;
-  } else if (isError) {
+    let pagingData;
+    if (menus.length >= 6) {
+      pagingData = menus.slice(page * 6, page * 6 + 6);
+    } else {
+      pagingData = menus;
+    }
+    content = (
+      <>
+        <MenuCard menuData={pagingData} />
+        <Pagination
+          count={menus.length / 6}
+          sx={{ mt: 3 }}
+          onChange={(e, value) => setPage(value - 1)}
+        />
+      </>
+    );
+  } else if (isError && error) {
     content = <div>{error.toString()}</div>;
   }
 
-  return (
-    <>
-      <Header />
-      <h1>メニュー一覧</h1>
-      <div>
-        {content}
-        <Button variant="outlined">Hello World</Button>
-      </div>
-      <Footer />
-    </>
-  );
+  return <div className="menu_list">{content}</div>;
 };
