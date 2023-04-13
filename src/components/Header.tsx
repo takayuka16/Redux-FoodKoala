@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import { config } from "../apikey";
+import type { User } from "../types/users.type";
 
 const pages = [
   { name: "メニュー", path: "/items" },
@@ -26,7 +27,7 @@ const settings = [{ name: "マイページ", path: "/mypage" }];
 export function Header() {
   const userId = Cookies.get("user_id");
   const url = config.SUPABASE_URL;
-  const [userData, setUserData] = React.useState();
+  const [userData, setUserData] = React.useState<User[]>();
   const [auth, setAuth] = React.useState("");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -48,7 +49,6 @@ export function Header() {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setUserData(data);
         });
     }
@@ -175,13 +175,13 @@ export function Header() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {auth.length > 0 ? (
+                {userData === undefined ? (
+                  <Avatar alt="unknown user" src="/images/default_user_icon" />
+                ) : (
                   <Avatar
                     alt={`${userData[0].name}`}
                     src="/static/images/avatar/2.jpg"
                   />
-                ) : (
-                  <Avatar alt="unknown user" src="/images/default_user_icon" />
                 )}
               </IconButton>
             </Tooltip>
