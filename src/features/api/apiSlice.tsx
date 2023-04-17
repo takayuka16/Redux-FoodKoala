@@ -57,6 +57,16 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    getOrderHisories: builder.query({
+      query: (userId) => ({
+        url: `/order_history?user_id=eq.${userId}`,
+        method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -66,4 +76,5 @@ export const {
   useGetMenuByShopIdQuery,
   useGetShopsQuery,
   useGetShopByIdQuery,
+  useGetOrderHisoriesQuery,
 } = apiSlice;
