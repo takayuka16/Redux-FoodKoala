@@ -10,7 +10,7 @@ import Navigation from "./components/Nav";
 import { SingleShopPage } from "./features/shop/SingleShopPage";
 import Signup from "./features/SignUp";
 import Login from "./features/Login";
-import Concept from "./features/Concept";
+import Concept from "./features/concept/Concept";
 import OrderHistoryList from "./features/order/OrderHistory";
 
 function App() {

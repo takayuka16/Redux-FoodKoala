@@ -70,6 +70,11 @@ export function Header() {
     setAnchorElUser(null);
   };
 
+  const handleLogout = () => {
+    setAnchorElUser(null);
+    Cookies.remove("user_id");
+  };
+
   return (
     <AppBar position="static" color="transparent">
       <Container maxWidth="xl">
@@ -201,26 +206,24 @@ export function Header() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting, index) => (
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">
-                    <Link to={`${setting.path}`} key={index}>
-                      {setting.name}
-                    </Link>
-                  </Typography>
-                </MenuItem>
+                <Link to={`${setting.path}`} key={index}>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting.name}</Typography>
+                  </MenuItem>
+                </Link>
               ))}
               {auth.length > 0 ? (
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">
-                    <Link to="/login">ログアウト</Link>
-                  </Typography>
-                </MenuItem>
+                <Link to="/login">
+                  <MenuItem onClick={handleLogout}>
+                    <Typography textAlign="center">ログアウト</Typography>
+                  </MenuItem>
+                </Link>
               ) : (
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">
-                    <Link to="/login">ログイン</Link>
-                  </Typography>
-                </MenuItem>
+                <Link to="/login">
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">ログイン</Typography>
+                  </MenuItem>
+                </Link>
               )}
             </Menu>
           </Box>
