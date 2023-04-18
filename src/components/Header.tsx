@@ -134,8 +134,8 @@ export function Header() {
               }}
             >
               {pages.map((page) => (
-                <Link to={page.path}>
-                  <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                <Link to={page.path} key={page.name}>
+                  <MenuItem onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">{page.name}</Typography>
                   </MenuItem>
                 </Link>
@@ -164,13 +164,14 @@ export function Header() {
           {/* パソコンのレイアウト */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Button
-                key={page.path}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "black", display: "block" }}
-              >
-                <Link to={page.path}>{page.name}</Link>
-              </Button>
+              <Link to={page.path} key={page.path}>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "black", display: "block" }}
+                >
+                  {page.name}
+                </Button>
+              </Link>
             ))}
           </Box>
           <Box sx={{ flexGrow: 0, mx: 2 }}>
@@ -213,13 +214,13 @@ export function Header() {
                 </Link>
               ))}
               {auth.length > 0 ? (
-                <Link to="/login">
+                <Link to="/login" key={"logout"}>
                   <MenuItem onClick={handleLogout}>
                     <Typography textAlign="center">ログアウト</Typography>
                   </MenuItem>
                 </Link>
               ) : (
-                <Link to="/login">
+                <Link to="/login" key={"login"}>
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">ログイン</Typography>
                   </MenuItem>
