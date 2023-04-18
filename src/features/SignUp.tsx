@@ -10,6 +10,18 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { config } from "../apikey";
 import { useNavigate } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+type FormValues = {
+  name: string;
+  email: string;
+  zipcode: string;
+  address: string;
+  phone_number: string;
+  password: string;
+};
 
 function Copyright(props: any) {
   return (
@@ -31,28 +43,109 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
+const schema = yup.object().shape({
+  name: yup
+    .string()
+    .matches(/^(^[0-9]*)$/, "数字は使用できません")
+    .required("氏名は入力必須項目です"),
+  email: yup
+    .string()
+    .lowercase()
+    .email("正しいメールアドレスの形式で入力してください")
+    .required("メールアドレスは入力必須項目です"),
+  zipcode: yup.string().max(7).min(7).required("郵便番号は入力必須項目です"),
+  address: yup.string().required("住所は入力必須項目です"),
+  phone_number: yup
+    .string()
+    .max(11)
+    .min(11)
+    .required("電話番号は入力必須項目です"),
+  password: yup
+    .string()
+    .matches(/(?=.*[a-z])/, "小文字を含めてください")
+    .matches(/(?=.*[A-Z])/, "大文字を含めてください")
+    .matches(/(?=.*[0-9])/, "数字を含めてください")
+    .min(8, "パスワードは8文字以上16文字以下で入力してください")
+    .max(16, "パスワードは8文字以上16文字以下で入力してください")
+    .required("パスワードは必須項目です"),
+});
+
 export default function SignUp() {
   const navigate = useNavigate();
   const url = config.SUPABASE_URL;
+  const [values, setValues] = React.useState({
+    name: "",
+    email: "",
+    zipcode: "",
+    address: "",
+    phone_number: "",
+    password: "",
+  });
+  const [confirmPassword, setComfirmPassword] = React.useState("");
+  const [confirmPasswordMessage, setConfirmPasswordMessage] =
+    React.useState("");
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    mode: "onBlur",
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit: SubmitHandler<FormValues> = async () => {
     await fetch(`${url}/users`, {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         apikey: `${config.SUPABASE_ANON_KEY}`,
         Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(values),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("ユーザー登録が完了しました", data);
+        console.log("ユーザー登録に成功しました", data.message());
         navigate("/login");
       })
-      .catch((error) => console.error("ログインに失敗しました", error.text()));
+      .catch((error) => console.error(error));
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
+
+  //パスワードと確認用パスワードが等しいか確認
+  const checkPassword = (confirmPassword: string) => {
+    if (values.password === confirmPassword) {
+      setConfirmPasswordMessage("");
+    } else {
+      setConfirmPasswordMessage("確認用パスワードが間違っています");
+    }
+  };
+
+  //郵便番号から住所を検索
+  const searchAddress = async () => {
+    await fetch(
+      `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${values.zipcode}`
+    )
+      .then((res) => res.json())
+      .then((data) =>
+        setValues({
+          ...values,
+          address: `${
+            data.results[0].address1 +
+            data.results[0].address2 +
+            data.results[0].address3
+          }`,
+        })
+      )
+      .catch((error) => console.log("郵便番号検索に失敗しました", error));
   };
 
   return (
@@ -77,82 +170,124 @@ export default function SignUp() {
           </Typography>
           <Box
             component="form"
-            noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             sx={{ mt: 3 }}
+            noValidate
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
+                  name="name"
+                  value={values.name}
                   fullWidth
-                  id="firstName"
-                  label="姓"
+                  error={!!errors.name}
+                  helperText={errors.name?.message}
+                  inputRef={register}
+                  id="name"
+                  label="氏名"
                   autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="名"
-                  name="lastName"
-                  autoComplete="family-name"
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                    handleInputChange(event)
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                  inputRef={register}
                   id="email"
                   label="メールアドレス"
                   name="email"
-                  autoComplete="email"
+                  value={values.email}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                    handleInputChange(event)
+                  }
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
                 <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="パスワード"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  required
-                  fullWidth
                   name="zipcode"
-                  label="郵便番号"
+                  error={!!errors.zipcode}
+                  helperText={errors.zipcode?.message}
+                  inputRef={register}
+                  value={values.zipcode}
+                  label="郵便番号(ハイフン不要)"
                   id="zipcode"
-                  autoComplete="123-4567"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleInputChange(e)
+                  }
                 />
+                <Button
+                  variant="contained"
+                  sx={{ ml: 2 }}
+                  onClick={searchAddress}
+                >
+                  郵便番号で住所を検索
+                </Button>
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
+                  error={!!errors.address}
+                  helperText={errors.address?.message}
+                  inputRef={register}
                   name="address"
+                  value={values.address}
                   label="住所"
                   id="address"
-                  autoComplete="東京都新宿区"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleInputChange(e)
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
+                  error={!!errors.phone_number}
+                  helperText={errors.phone_number?.message}
+                  inputRef={register}
                   name="phone_number"
+                  value={values.phone_number}
                   type="tel"
                   label="電話番号"
                   id="phonenumber"
-                  autoComplete="090-1234-5678"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleInputChange(e)
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  error={!!errors.password}
+                  helperText={errors.password?.message}
+                  inputRef={register}
+                  name="password"
+                  value={values.password}
+                  label="パスワード"
+                  type="password"
+                  id="password"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleInputChange(e)
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  error={!confirmPassword}
+                  helperText={confirmPasswordMessage}
+                  name="confirmed_password"
+                  value={confirmPassword}
+                  label="確認用パスワード"
+                  type="password"
+                  id="confirmed_password"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setComfirmPassword(e.currentTarget.value);
+                    checkPassword(e.currentTarget.value);
+                  }}
                 />
               </Grid>
             </Grid>
@@ -178,28 +313,3 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
-
-// XML HTTP Requestバージョン
-// const xhr = new XMLHttpRequest();
-// xhr.open("GET", `${url}/users?email=${email}&password=${password}`, true);
-//     xhr.setRequestHeader("apikey", `${config.SUPABASE_ANON_KEY}`);
-//     xhr.setRequestHeader("Authorization", `Bearer ${config.SUPABASE_ANON_KEY}`);
-//     xhr.send();
-
-//     xhr.onreadystatechange = async function () {
-//       if (xhr.status === 200 && xhr.readyState === 4) {
-//         try {
-//           console.log(xhr.responseText);
-//           const response = await JSON.parse(xhr.responseText);
-//           const data = response.json();
-//           if (data.length > 0) {
-//             Cookies.set("user_id", data[0].id);
-//             navigate("/items");
-//           } else {
-//             throw new Error("ユーザーが見つかりませんでした");
-//           }
-//         } catch (error: any) {
-//           console.error("ログインに失敗しました", error.text());
-//         }
-//       }
-//     };

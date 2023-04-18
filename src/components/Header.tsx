@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import { config } from "../apikey";
 import type { User } from "../types/users.type";
+import CartIcon from "./CartIcon";
 
 const pages = [
   { name: "メニュー", path: "/items" },
@@ -67,6 +68,11 @@ export function Header() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    setAnchorElUser(null);
+    Cookies.remove("user_id");
   };
 
   return (
@@ -128,8 +134,8 @@ export function Header() {
               }}
             >
               {pages.map((page) => (
-                <Link to={page.path}>
-                  <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                <Link to={page.path} key={page.name}>
+                  <MenuItem onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">{page.name}</Typography>
                   </MenuItem>
                 </Link>
@@ -144,12 +150,7 @@ export function Header() {
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
+              flexGrow: 0,
             }}
           >
             <img
@@ -163,14 +164,18 @@ export function Header() {
           {/* パソコンのレイアウト */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Button
-                key={page.path}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "black", display: "block" }}
-              >
-                <Link to={page.path}>{page.name}</Link>
-              </Button>
+              <Link to={page.path} key={page.path}>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "black", display: "block" }}
+                >
+                  {page.name}
+                </Button>
+              </Link>
             ))}
+          </Box>
+          <Box sx={{ flexGrow: 0, mx: 2 }}>
+            <CartIcon />
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
@@ -202,26 +207,24 @@ export function Header() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting, index) => (
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">
-                    <Link to={`${setting.path}`} key={index}>
-                      {setting.name}
-                    </Link>
-                  </Typography>
-                </MenuItem>
+                <Link to={`${setting.path}`} key={index}>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting.name}</Typography>
+                  </MenuItem>
+                </Link>
               ))}
               {auth.length > 0 ? (
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">
-                    <Link to="/login">ログアウト</Link>
-                  </Typography>
-                </MenuItem>
+                <Link to="/login" key={"logout"}>
+                  <MenuItem onClick={handleLogout}>
+                    <Typography textAlign="center">ログアウト</Typography>
+                  </MenuItem>
+                </Link>
               ) : (
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">
-                    <Link to="/login">ログイン</Link>
-                  </Typography>
-                </MenuItem>
+                <Link to="/login" key={"login"}>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">ログイン</Typography>
+                  </MenuItem>
+                </Link>
               )}
             </Menu>
           </Box>
