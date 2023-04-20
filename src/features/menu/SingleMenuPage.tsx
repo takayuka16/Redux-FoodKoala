@@ -6,8 +6,8 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import ShopIcon from "../../components/ShopIcon";
-import { Button } from "@mui/material";
+import ShopIcon from "../../components/shop/ShopIcon";
+import CartModal from "../../components/Modal";
 
 export default function SingleMenuPage() {
   const { itemId } = useParams();
@@ -44,15 +44,7 @@ export default function SingleMenuPage() {
             <Typography variant="body2" color="text.secondary">
               {menu.description}
             </Typography>
-            <Button
-              color="inherit"
-              variant="contained"
-              sx={{ width: 370, mt: 2, mx: "auto" }}
-            >
-              <Typography variant="body1" color="text.secondary">
-                カートに追加する ¥{menu.price}
-              </Typography>
-            </Button>
+            <CartModal item={menu} price={menu.price} />
           </CardContent>
         </Link>
       </Card>

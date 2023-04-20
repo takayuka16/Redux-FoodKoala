@@ -1,5 +1,5 @@
 import Avatar from "@mui/material/Avatar";
-import { useGetShopByIdQuery } from "../features/api/apiSlice";
+import { useGetShopByIdQuery } from "../../features/api/apiSlice";
 import { Link } from "react-router-dom";
 
 export default function ShopIcon({ shopId }: { shopId: number }) {

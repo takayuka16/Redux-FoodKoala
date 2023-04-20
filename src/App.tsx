@@ -8,7 +8,7 @@ import { InquiryForm } from "./features/InquiryForm";
 import SingleMenuPage from "./features/menu/SingleMenuPage";
 import Navigation from "./components/Nav";
 import { SingleShopPage } from "./features/shop/SingleShopPage";
-import Signup from "./features/SignUp";
+import SignUp from "./features/SignUp";
 import Login from "./features/Login";
 import Concept from "./features/concept/Concept";
 import OrderHistoryList from "./features/order/OrderHistory";
@@ -30,7 +30,7 @@ function App() {
             <Route path="/favorites" element={<FavoriteShopList />} />
             <Route path="/order_history" element={<OrderHistoryList />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/signUp" element={<Signup />} />
+            <Route path="/signUp" element={<SignUp />} />
             <Route path="/concept" element={<Concept />} />
             <Route path="/inquiry_form" element={<InquiryForm />} />
           </Route>

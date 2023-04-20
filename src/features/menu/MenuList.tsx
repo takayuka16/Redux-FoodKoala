@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useGetMenusQuery } from "../api/apiSlice";
-import MenuCard from "../../components/MenuCard";
+import MenuCard from "../../components/menu/MenuCard";
 import { Menu } from "../../types/menus.type";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query/fetchBaseQuery";
 import { SerializedError } from "@reduxjs/toolkit/dist/createAsyncThunk";

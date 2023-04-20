@@ -4,9 +4,9 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import type { Menu } from "../types/menus.type";
+import type { Menu } from "../../types/menus.type";
 import { Link } from "react-router-dom";
-import ShopIcon from "./ShopIcon";
+import ShopIcon from "../shop/ShopIcon";
 
 export default function MenuCard({ menuData }: { menuData: Menu[] }) {
   return (

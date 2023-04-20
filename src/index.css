@@ -64,7 +64,8 @@ a {
   margin: 1%;
 }
 
-.shop_icon {
+.shop_icon,
+.item_icon {
   width: 4rem;
   height: 4rem;
   object-fit: cover;

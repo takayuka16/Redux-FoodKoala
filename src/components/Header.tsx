@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import { config } from "../apikey";
 import type { User } from "../types/users.type";
-import CartIcon from "./CartIcon";
+import CartIcon from "./cart/CartIcon";
 
 const pages = [
   { name: "メニュー", path: "/items" },
@@ -111,7 +111,7 @@ export function Header() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              color="warning"
             >
               <MenuIcon />
             </IconButton>

@@ -1,5 +1,5 @@
-import { useGetMenuByShopIdQuery } from "../features/api/apiSlice";
-import type { Menu } from "../types/menus.type";
+import { useGetMenuByShopIdQuery } from "../../features/api/apiSlice";
+import type { Menu } from "../../types/menus.type";
 
 export default function ShopTop3Menu({ shopId }: { shopId: number }) {
   const {
