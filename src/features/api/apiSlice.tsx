@@ -67,6 +67,71 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    getCartItemsById: builder.query({
+      query: (userId) => ({
+        url: `/cart_items?cart_id=eq.${userId}`,
+        method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
+    getCartById: builder.query({
+      query: (userId) => ({
+        url: `/carts?user_id=eq.${userId}`,
+        method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
+    editPayment: builder.mutation({
+      query: ({ userId, payment }) => ({
+        url: `/carts?user_id=eq.${userId}`,
+        method: "PATCH",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+        body: {
+          payment_method: payment,
+        },
+      }),
+    }),
+    getCouponById: builder.query({
+      query: (userId) => ({
+        url: `/coupon?user_id=eq.${userId}`,
+        method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
+    addNewOrder: builder.mutation({
+      query: (order) => ({
+        url: `/order_history`,
+        method: "POST",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+        body: order,
+      }),
+    }),
+    addNewOrderItems: builder.mutation({
+      query: (orderItems) => ({
+        url: "/order_items",
+        method: "POST",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+        body: orderItems,
+      }),
+    }),
   }),
 });
 
@@ -77,4 +142,10 @@ export const {
   useGetShopsQuery,
   useGetShopByIdQuery,
   useGetOrderHisoriesQuery,
+  useGetCartItemsByIdQuery,
+  useGetCartByIdQuery,
+  useEditPaymentMutation,
+  useGetCouponByIdQuery,
+  useAddNewOrderMutation,
+  useAddNewOrderItemsMutation,
 } = apiSlice;

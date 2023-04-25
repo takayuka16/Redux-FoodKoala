@@ -1,7 +1,7 @@
 import Card from "@mui/material/Card";
 import { Menu } from "../../types/menus.type";
 import { useGetMenuByIdQuery } from "../api/apiSlice";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -28,25 +28,23 @@ export default function SingleMenuPage() {
     const menu: Menu = menuData[0];
     content = (
       <Card variant="outlined" sx={{ maxWidth: 400 }} className="menu_card">
-        <Link to={`/items/${menu.id}`}>
-          <CardHeader
-            avatar={<ShopIcon shopId={menu.shop_id} />}
-            title={menu.name}
-            subheader="September 14, 2016"
-          />
-          <CardMedia
-            component="img"
-            height="300"
-            image={menu.image_url}
-            alt="メニュー画像"
-          />
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              {menu.description}
-            </Typography>
-            <CartModal item={menu} price={menu.price} />
-          </CardContent>
-        </Link>
+        <CardHeader
+          avatar={<ShopIcon shopId={menu.shop_id} />}
+          title={menu.name}
+          subheader="September 14, 2016"
+        />
+        <CardMedia
+          component="img"
+          height="300"
+          image={menu.image_url}
+          alt="メニュー画像"
+        />
+        <CardContent>
+          <Typography variant="body2" color="text.secondary">
+            {menu.description}
+          </Typography>
+          <CartModal item={menu} price={menu.price} />
+        </CardContent>
       </Card>
     );
   } else if (isError) {

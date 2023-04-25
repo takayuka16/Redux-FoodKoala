@@ -12,6 +12,7 @@ import SignUp from "./features/SignUp";
 import Login from "./features/Login";
 import Concept from "./features/concept/Concept";
 import OrderHistoryList from "./features/order/OrderHistory";
+import ConfirmOrder from "./features/order/ConfirmOrder";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route path=":shopId" element={<SingleShopPage />} />
             </Route>
             <Route path="/favorites" element={<FavoriteShopList />} />
+            <Route path="/confirm_order" element={<ConfirmOrder />} />
             <Route path="/order_history" element={<OrderHistoryList />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signUp" element={<SignUp />} />

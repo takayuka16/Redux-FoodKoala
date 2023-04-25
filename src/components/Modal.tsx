@@ -1,10 +1,17 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { addCartItem } from "../features/cart/CartSlice";
+import {
+  addCartItem,
+  getCartCount,
+  getSubTotal,
+  calculateTax,
+  getTotalAmount,
+} from "../features/cart/CartSlice";
 import { useDispatch } from "react-redux";
 import type { Menu } from "../types/menus.type";
 import ModalContent from "./ModalContent";
+import { Modal } from "@mui/material";
 
 export default function CartModal({
   item,
@@ -15,9 +22,21 @@ export default function CartModal({
 }) {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
+  const cartData = localStorage.getItem("redux_localstorage_simple_cart");
 
   const handleOpen = () => {
-    dispatch(addCartItem(item));
+    dispatch(
+      addCartItem({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image_url: item.image_url,
+      })
+    );
+    dispatch(getCartCount(""));
+    dispatch(getSubTotal(""));
+    dispatch(calculateTax(""));
+    dispatch(getTotalAmount(""));
     setOpen(true);
   };
 
@@ -35,7 +54,15 @@ export default function CartModal({
           カートに追加する ¥{price}
         </Typography>
       </Button>
-      <ModalContent open={open} onClose={handleClose} />
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        key={"modal"}
+      >
+        <ModalContent onClose={handleClose} cartData={cartData} />
+      </Modal>
     </div>
   );
 }

@@ -10,7 +10,7 @@ export const MenuList = () => {
   const [page, setPage] = React.useState(0);
   const {
     data: menus = [],
-    isLoading,
+    isLoading: isMenuLoading,
     isSuccess,
     isError,
     error,
@@ -26,7 +26,7 @@ export const MenuList = () => {
 
   let content;
 
-  if (isLoading) {
+  if (isMenuLoading) {
     content = <div>Loading now...</div>;
   } else if (isSuccess) {
     let pagingData;
