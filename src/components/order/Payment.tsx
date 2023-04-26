@@ -5,7 +5,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { Box } from "@mui/joy";
-import { useEditPaymentMutation } from "../features/api/apiSlice";
+import { useEditPaymentMutation } from "../../features/api/apiSlice";
 import Cookies from "js-cookie";
 
 export default function Payment() {
@@ -25,7 +25,7 @@ export default function Payment() {
         sx={{
           border: "solid 1px darkgray",
           borderRadius: 3,
-          my: 3,
+          mt: 2,
           padding: 2,
         }}
       >

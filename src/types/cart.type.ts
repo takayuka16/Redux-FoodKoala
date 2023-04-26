@@ -1,11 +1,23 @@
 import type { CartItems } from "./cartItems.type";
 
-type Cart = {
+type LocalCart = {
   cartItems: CartItems[];
-  totalCount: number;
+  total_count: number;
   tax: number;
-  subAmount: number;
-  totalAmount: number;
+  sub_amount: number;
+  total_amount: number;
 };
 
-export type { Cart };
+type Cart = {
+  id: number;
+  user_id: number;
+  discount: number;
+  couponcode: string;
+  payment_method: string;
+  total_count: number;
+  tax: number;
+  sub_amount: number;
+  total_amount: number;
+};
+
+export type { LocalCart, Cart };

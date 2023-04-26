@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { config } from "../apikey";
 import { CartItems } from "../types/cartItems.type";
-import type { Cart } from "../types/cart.type";
+import type { LocalCart } from "../types/cart.type";
 import CartItemsList from "./cart/CartItemsList";
 
 const style = {
@@ -26,12 +26,12 @@ export default function ModalContent({ onClose, cartData }: any) {
   const userId = Cookies.get("user_id");
 
   let cartItems: CartItems[] = [];
-  let currentCart: Cart = {
+  let currentCart: LocalCart = {
     cartItems: cartItems,
-    totalCount: 0,
+    total_count: 0,
     tax: 0,
-    subAmount: 0,
-    totalAmount: 0,
+    sub_amount: 0,
+    total_amount: 0,
   };
   if (cartData !== null) {
     currentCart = JSON.parse(cartData);
@@ -49,6 +49,7 @@ export default function ModalContent({ onClose, cartData }: any) {
         },
         body: JSON.stringify({
           cart_id: Number(userId),
+          shop_id: item.shop_id,
           item_id: item.id,
           quantity: item.quantity,
           name: item.name,
@@ -73,10 +74,10 @@ export default function ModalContent({ onClose, cartData }: any) {
       },
       body: JSON.stringify({
         user_id: Number(userId),
-        total_count: currentCart.totalCount,
+        total_count: currentCart.total_count,
         tax: currentCart.tax,
-        sub_amount: currentCart.subAmount,
-        total_amount: currentCart.totalAmount,
+        sub_amount: currentCart.sub_amount,
+        total_amount: currentCart.total_amount,
       }),
     }).catch((error) => {
       console.error(error);

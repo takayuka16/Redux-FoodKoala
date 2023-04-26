@@ -4,12 +4,13 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useGetCouponByIdQuery } from "../features/api/apiSlice";
+import { useGetCouponByIdQuery } from "../../features/api/apiSlice";
 import Cookies from "js-cookie";
-import { Coupon } from "../types/coupon.type";
+import { Coupon } from "../../types/coupon.type";
+import { useEditCouponMutation } from "../../features/api/apiSlice";
 
 export default function CouponList() {
-  const [value, setValue] = React.useState("");
+  const [couponIndex, setCouponIndex] = React.useState("");
   const userId = Cookies.get("user_id");
   const {
     data: coupon,
@@ -19,9 +20,17 @@ export default function CouponList() {
     error,
   } = useGetCouponByIdQuery(userId);
 
+  const [updateCoupon] = useEditCouponMutation();
+
   const handleChange = (event: SelectChangeEvent) => {
-    const coupon = event.target.value as string;
-    setValue(coupon);
+    const couponIndex = event.target.value as string;
+    console.log("coupon", couponIndex);
+    setCouponIndex(couponIndex);
+    updateCoupon({
+      userId: userId,
+      discount: coupon[couponIndex].discount,
+      couponcode: coupon[couponIndex].couponcode,
+    });
   };
 
   let content;
@@ -35,12 +44,14 @@ export default function CouponList() {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={value}
+          value={couponIndex}
           label="クーポンを選択"
           onChange={handleChange}
         >
-          {coupon.map((coupon: Coupon) => (
-            <MenuItem value={20}>{coupon.couponcode}</MenuItem>
+          {coupon.map((coupon: Coupon, index: number) => (
+            <MenuItem value={index} key={index}>
+              {coupon.couponcode}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -51,7 +62,7 @@ export default function CouponList() {
 
   return (
     <>
-      <Box sx={{ minWidth: 120, my: 2 }}>{content}</Box>
+      <Box sx={{ minWidth: 120, mt: 2 }}>{content}</Box>
     </>
   );
 }

@@ -1,16 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Cart } from "../../types/cart.type";
+import { LocalCart } from "../../types/cart.type";
 import { createEntityAdapter } from "@reduxjs/toolkit";
 
 const useCartSlice = createSlice({
   name: "cart",
   initialState: {
     cartItems: [],
-    totalCount: 0,
+    total_count: 0,
     tax: 0,
-    subAmount: 0,
-    totalAmount: 0,
-  } as Cart,
+    sub_amount: 0,
+    total_amount: 0,
+  } as LocalCart,
 
   reducers: {
     addCartItem: (state, action) => {
@@ -33,10 +33,10 @@ const useCartSlice = createSlice({
       let cartCount = state.cartItems.reduce((total, item) => {
         return item.quantity + total;
       }, 0);
-      state.totalCount = cartCount;
+      state.total_count = cartCount;
     },
     getSubTotal: (state, action) => {
-      state.subAmount = state.cartItems.reduce((acc, item) => {
+      state.sub_amount = state.cartItems.reduce((acc, item) => {
         return acc + item.price * item.quantity;
       }, 0);
     },
@@ -65,11 +65,11 @@ const useCartSlice = createSlice({
       }
     },
     calculateTax: (state, action) => {
-      let totalTax = (10 / 100) * state.subAmount;
+      let totalTax = (10 / 100) * state.sub_amount;
       state.tax = totalTax;
     },
-    getTotalAmount: (state, action) => {
-      state.totalAmount = state.subAmount + state.tax;
+    gettotal_amount: (state, action) => {
+      state.total_amount = state.sub_amount + state.tax;
     },
   },
 });
@@ -85,7 +85,7 @@ export const {
   increment,
   decrement,
   calculateTax,
-  getTotalAmount,
+  gettotal_amount,
 } = useCartSlice.actions;
 export default useCartSlice.reducer;
 

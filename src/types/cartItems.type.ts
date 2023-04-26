@@ -1,5 +1,6 @@
 type CartItems = {
   id: number;
+  shop_id: number;
   name: string;
   quantity: number;
   price: number;

@@ -6,7 +6,7 @@ import {
   getCartCount,
   getSubTotal,
   calculateTax,
-  getTotalAmount,
+  gettotal_amount,
 } from "../features/cart/CartSlice";
 import { useDispatch } from "react-redux";
 import type { Menu } from "../types/menus.type";
@@ -28,6 +28,7 @@ export default function CartModal({
     dispatch(
       addCartItem({
         id: item.id,
+        shop_id: item.shop_id,
         name: item.name,
         price: item.price,
         image_url: item.image_url,
@@ -36,7 +37,7 @@ export default function CartModal({
     dispatch(getCartCount(""));
     dispatch(getSubTotal(""));
     dispatch(calculateTax(""));
-    dispatch(getTotalAmount(""));
+    dispatch(gettotal_amount(""));
     setOpen(true);
   };
 

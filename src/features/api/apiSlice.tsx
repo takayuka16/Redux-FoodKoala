@@ -57,9 +57,19 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    getOrderHisories: builder.query({
+    getOrderHisorie: builder.query({
       query: (userId) => ({
         url: `/order_history?user_id=eq.${userId}`,
+        method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
+    getOrderItems: builder.query({
+      query: (userId) => ({
+        url: `/order_items?user_id=eq.${userId}`,
         method: "GET",
         headers: {
           apikey: `${config.SUPABASE_ANON_KEY}`,
@@ -110,6 +120,20 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    editCoupon: builder.mutation({
+      query: ({ userId, discount, couponcode }) => ({
+        url: `/carts?user_id=eq.${userId}`,
+        method: "PATCH",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+        body: {
+          discount: discount,
+          couponcode: couponcode,
+        },
+      }),
+    }),
     addNewOrder: builder.mutation({
       query: (order) => ({
         url: `/order_history`,
@@ -141,11 +165,13 @@ export const {
   useGetMenuByShopIdQuery,
   useGetShopsQuery,
   useGetShopByIdQuery,
-  useGetOrderHisoriesQuery,
+  useGetOrderHisorieQuery,
+  useGetOrderItemsQuery,
   useGetCartItemsByIdQuery,
   useGetCartByIdQuery,
   useEditPaymentMutation,
   useGetCouponByIdQuery,
+  useEditCouponMutation,
   useAddNewOrderMutation,
   useAddNewOrderItemsMutation,
 } = apiSlice;

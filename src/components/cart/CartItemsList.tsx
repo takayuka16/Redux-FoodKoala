@@ -11,14 +11,14 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import IconButton from "@mui/material/IconButton/IconButton";
 import { CartItems } from "../../types/cartItems.type";
 import { useDispatch } from "react-redux";
-import { Cart } from "../../types/cart.type";
+import { LocalCart } from "../../types/cart.type";
 
 export default function CartItemsList({
   cartItems,
   currentCart,
 }: {
   cartItems: CartItems[];
-  currentCart: Cart;
+  currentCart: LocalCart;
 }) {
   const dispatch = useDispatch();
 
@@ -109,8 +109,8 @@ export default function CartItemsList({
         ))
       )}
       <Divider sx={{ mt: 5 }} />
-      <Typography component="p" variant="h6" sx={{ float: "right", my: 2 }}>
-        小計：{currentCart.subAmount}円
+      <Typography component="p" variant="h6" sx={{ textAlign: "right", my: 2 }}>
+        小計：{currentCart.sub_amount}円
       </Typography>
     </Box>
   );

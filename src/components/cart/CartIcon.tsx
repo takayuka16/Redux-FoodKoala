@@ -6,7 +6,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { CartItems } from "../../types/cartItems.type";
-import { Cart } from "../../types/cart.type";
+import { LocalCart } from "../../types/cart.type";
 import { config } from "../../apikey";
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
@@ -26,12 +26,12 @@ export default function CartIcon() {
   const cartData = localStorage.getItem("redux_localstorage_simple_cart");
 
   let cartItems: CartItems[] = [];
-  let currentCart: Cart = {
+  let currentCart: LocalCart = {
     cartItems: cartItems,
-    totalCount: 0,
+    total_count: 0,
     tax: 0,
-    subAmount: 0,
-    totalAmount: 0,
+    sub_amount: 0,
+    total_amount: 0,
   };
   if (cartData !== null) {
     currentCart = JSON.parse(cartData);
@@ -73,10 +73,10 @@ export default function CartIcon() {
       },
       body: JSON.stringify({
         user_id: Number(userId),
-        total_count: currentCart.totalCount,
+        total_count: currentCart.total_count,
         tax: currentCart.tax,
-        sub_amount: currentCart.subAmount,
-        total_amount: currentCart.totalAmount,
+        sub_amount: currentCart.sub_amount,
+        total_amount: currentCart.total_amount,
       }),
     }).catch((error) => {
       console.error(error);
