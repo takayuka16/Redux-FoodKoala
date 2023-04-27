@@ -13,7 +13,7 @@ import Login from "./features/Login";
 import Concept from "./features/concept/Concept";
 import OrderHistoryList from "./features/order/OrderHistory";
 import ConfirmOrder from "./features/order/ConfirmOrder";
-import OrderCompleted from "./features/order/Order_completed";
+import OrderCompleted from "./features/order/OrderCompleted";
 
 function App() {
   return (

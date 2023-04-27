@@ -68,8 +68,8 @@ export const apiSlice = createApi({
       }),
     }),
     getOrderItems: builder.query({
-      query: (userId) => ({
-        url: `/order_items?user_id=eq.${userId}`,
+      query: (ordercode) => ({
+        url: `/order_items?ordercode=eq.${ordercode}`,
         method: "GET",
         headers: {
           apikey: `${config.SUPABASE_ANON_KEY}`,

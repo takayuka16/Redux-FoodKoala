@@ -8,18 +8,6 @@ import { CartItems } from "../types/cartItems.type";
 import type { LocalCart } from "../types/cart.type";
 import CartItemsList from "./cart/CartItemsList";
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
 export default function ModalContent({ onClose, cartData }: any) {
   const navigate = useNavigate();
   const url = config.SUPABASE_URL;
@@ -99,7 +87,16 @@ export default function ModalContent({ onClose, cartData }: any) {
   };
 
   return (
-    <Box sx={style}>
+    <Box
+      sx={{
+        width: "40vw",
+        bgcolor: "background.paper",
+        border: "2px solid #000",
+        boxShadow: 24,
+        p: 4,
+        overflowX: "scroll",
+      }}
+    >
       <CartItemsList cartItems={cartItems} currentCart={currentCart} />
       <Button
         variant="contained"

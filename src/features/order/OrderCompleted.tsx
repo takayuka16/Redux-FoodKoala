@@ -4,7 +4,7 @@ import { useGetOrderHisorieQuery } from "../api/apiSlice";
 import Cookies from "js-cookie";
 import OrderItemsList from "../../components/order/OrderItemsList";
 
-export default async function OrderCompleted() {
+export default function OrderCompleted() {
   const userId = Cookies.get("user_id");
   const {
     data: orderHistory,
@@ -19,14 +19,13 @@ export default async function OrderCompleted() {
   if (isLoading) {
     content = <div>Loading now...</div>;
   } else if (isSuccess) {
-    const ordercode = orderHistory[0].ordercode;
     content = (
       <>
         <Typography component="h1" variant="h5" sx={{ textAlign: "center" }}>
-          ご注文ありがとうございました
+          ご注文ありがとうございました!
         </Typography>
         <Box sx={{ my: 2 }}>
-          <OrderItemsList ordercode={ordercode} />
+          <OrderItemsList ordercode={orderHistory[0].ordercode} />
           <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
             <PlaceIcon />
             <Typography>お店へのアクセスはこちら</Typography>

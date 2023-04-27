@@ -185,7 +185,7 @@ export function Header() {
                 ) : (
                   <Avatar
                     alt={`${userData[0].name}`}
-                    src="/static/images/avatar/2.jpg"
+                    src="/images/default_user_icon"
                   />
                 )}
               </IconButton>

@@ -23,7 +23,7 @@ export default function CartItemsList({
   const dispatch = useDispatch();
 
   return (
-    <Box sx={{ mb: 3 }}>
+    <Box sx={{ mb: 3, overflowX: "scroll" }}>
       <Typography
         id="modal-modal-title"
         variant="h6"
@@ -39,40 +39,44 @@ export default function CartItemsList({
       ) : (
         cartItems.map((item: CartItems) => (
           <Box
-            id="modal-modal-description"
+            id="shoppincart-modal-contents"
             sx={{
-              mt: 2,
+              my: 5,
               display: "flex",
               alignItems: "center",
             }}
             key={`item-${item.id}`}
           >
-            <Avatar
-              aria-label="item_icon"
-              variant="square"
-              sx={{ width: 70, height: 70, ml: 5 }}
-              key={`icon-${item.id}`}
-            >
-              <img
-                src={item.image_url}
-                alt="item_icon"
-                className="item_icon"
-                key={`img-${item.image_url}`}
-              />
-            </Avatar>
-            <Box sx={{ mx: 3 }} key={`box1-${item.id}`}>
+            <Box sx={{ flexGrow: 1 }}>
+              <Avatar
+                aria-label="item_icon"
+                variant="square"
+                sx={{ width: 90, height: 90 }}
+                key={`icon-${item.id}`}
+              >
+                <img
+                  src={item.image_url}
+                  alt="item_icon"
+                  className="item_icon"
+                  key={`img-${item.image_url}`}
+                />
+              </Avatar>
+            </Box>
+            <Box sx={{ mx: 3, flexGrow: 2 }} key={`box1-${item.id}`}>
               <Typography key={`name-${item.id}`}>{item.name}</Typography>
               <Typography key={`price-${item.id}`}>{item.price}円</Typography>
             </Box>
             <Box
+              key={"item-count-box"}
               sx={{
                 mr: 5,
-                ml: 2,
-                px: 1,
                 border: "1px solid black",
                 borderRadius: 1,
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
+                flexGrow: 1,
+                width: 35,
               }}
             >
               <Box key={`box2-${item.id}`} sx={{ ml: 1 }}>
@@ -97,14 +101,16 @@ export default function CartItemsList({
                 </IconButton>
               </Box>
             </Box>
-            <Button
-              variant="contained"
-              color="inherit"
-              onClick={() => dispatch(removeCartItem(item))}
-              key={`delete-${item.id}`}
-            >
-              削除
-            </Button>
+            <Box key={"delete-button-box"} sx={{ flexGrow: 1 }}>
+              <Button
+                variant="contained"
+                color="inherit"
+                onClick={() => dispatch(removeCartItem(item))}
+                key={`delete-${item.id}`}
+              >
+                削除
+              </Button>
+            </Box>
           </Box>
         ))
       )}

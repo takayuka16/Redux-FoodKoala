@@ -7,6 +7,8 @@ import FormLabel from "@mui/material/FormLabel";
 import { Box } from "@mui/joy";
 import { useEditPaymentMutation } from "../../features/api/apiSlice";
 import Cookies from "js-cookie";
+import Stripe from "../checkout/Stripe";
+import { useEffect } from "react";
 
 export default function Payment() {
   const userId = Cookies.get("user_id");
@@ -18,6 +20,8 @@ export default function Payment() {
     setValue(payment);
     updatePayment({ userId: userId, payment: payment });
   };
+
+  useEffect(() => {}, [value]);
 
   return (
     <>
@@ -46,6 +50,7 @@ export default function Payment() {
               label="クレジットカード"
             />
           </RadioGroup>
+          {value === "クレジットカード" ? <Stripe /> : <></>}
         </FormControl>
       </Box>
     </>

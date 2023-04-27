@@ -58,9 +58,12 @@ export default function CartModal({
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="shoppincart-modal"
+        aria-describedby="shoppingcart-modal"
         key={"modal"}
+        sx={{
+          overflowX: "scroll",
+        }}
       >
         <ModalContent onClose={handleClose} cartData={cartData} />
       </Modal>
