@@ -1,10 +1,9 @@
+import React, { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { config } from "../../apikey";
-import { useState, useEffect } from "react";
 import { Elements } from "@stripe/react-stripe-js";
-import CheckoutForm from "./CheckoutForm";
+import CheckoutForm from "../components/checkout/CheckoutForm";
 
-const stripePromise = loadStripe(config.STRIPE_TEST_KEY);
+const stripePromise = loadStripe("sk_test_09l3shTSTKHYCzzZZsiLl2vA");
 
 export default function Stripe() {
   const [clientSecret, setClientSecret] = useState("");
@@ -22,14 +21,13 @@ export default function Stripe() {
   const appearance = {
     theme: "stripe",
   };
-
   const options = {
     clientSecret,
     appearance,
   };
 
   return (
-    <div className="stripe">
+    <div className="App">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm />

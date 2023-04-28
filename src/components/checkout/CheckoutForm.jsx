@@ -1,19 +1,18 @@
+import React, { useEffect, useState } from "react";
 import {
-  LinkAuthenticationElement,
   PaymentElement,
+  LinkAuthenticationElement,
+  useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { useStripe } from "@stripe/react-stripe-js";
-import { useState } from "react";
-import { useEffect } from "react";
-// import styles from "../../styles/Stripe.module.css";
+import styles from "../../styles/Stripe.module.css";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -32,18 +31,16 @@ export default function CheckoutForm() {
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       switch (paymentIntent.status) {
         case "succeeded":
-          setMessage("お支払いが完了しました");
+          setMessage("Payment succeeded!");
           break;
         case "processing":
-          setMessage("お支払い内容を確認しています");
+          setMessage("Your payment is processing.");
           break;
         case "requires_payment_method":
-          setMessage(
-            "エラーが発生しました。もう一度お支払いを実行してください"
-          );
+          setMessage("Your payment was not successful, please try again.");
           break;
         default:
-          setMessage("Something went wrong");
+          setMessage("Something went wrong.");
           break;
       }
     });
@@ -61,14 +58,14 @@ export default function CheckoutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost3000/order_completed",
+        return_url: "http://localhost:3000/items",
       },
     });
 
     if (error.type === "card_error" || error.type === "validation_error") {
       setMessage(error.message);
     } else {
-      setMessage("An unexpected error occured. ");
+      setMessage("An unexpected error occurred.");
     }
 
     setIsLoading(false);
@@ -79,22 +76,34 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
+    <form id="payment-form" className={styles.form} onSubmit={handleSubmit}>
       <LinkAuthenticationElement
         id="link-authentication-element"
         onChange={(e) => setEmail(e.target.value)}
       />
-      <PaymentElement id="payment-element" options={paymentElementOptions} />
-      <button id="submit" disabled={isLoading || !elements || !stripe}>
+      <PaymentElement
+        id="payment-element"
+        className={styles.payment_element}
+        options={paymentElementOptions}
+      />
+      <button
+        className={styles.button}
+        disabled={isLoading || !stripe || !elements}
+        id="submit"
+      >
         <span id="button-text">
           {isLoading ? (
-            <div className={"spinner"} id="spinner"></div>
+            <div className={styles.spinner} id="spinner"></div>
           ) : (
-            "支払いを完了する"
+            "Pay now"
           )}
         </span>
       </button>
-      {message && <div id="payment-message">{message}</div>}
+      {message && (
+        <div id="payment-message" className={styles.payment_message}>
+          {message}
+        </div>
+      )}
     </form>
   );
 }

@@ -2,7 +2,7 @@
   "name": "redux-app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost4242",
+  "proxy": "http://localhost:4242",
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
@@ -69,6 +69,8 @@
   "devDependencies": {
     "@types/jquery": "^3.5.16",
     "@types/js-cookie": "^3.0.3",
-    "@types/redux-persist": "^4.3.1"
+    "@types/redux-persist": "^4.3.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
   }
 }

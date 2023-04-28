@@ -3,11 +3,11 @@ import Badge, { BadgeProps } from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import { CartItems } from "../../types/cartItems.type";
 import { LocalCart } from "../../types/cart.type";
-import { config } from "../../apikey";
+import { Modal } from "@mui/material";
+import ModalContent from "../ModalContent";
+import { useSelector } from "react-redux";
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -19,85 +19,24 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
 }));
 
 export default function CartIcon() {
-  const userId = Cookies.get("user_id");
-  const navigate = useNavigate();
-  const url = config.SUPABASE_URL;
-
-  const cartData = localStorage.getItem("redux_localstorage_simple_cart");
+  const [open, setOpen] = React.useState(false);
+  const cartData = useSelector<any, LocalCart>((state) => state.cart);
 
   let cartItems: CartItems[] = [];
-  let currentCart: LocalCart = {
-    cartItems: cartItems,
-    total_count: 0,
-    tax: 0,
-    sub_amount: 0,
-    total_amount: 0,
+
+  if (cartData) {
+    cartItems = cartData.cartItems;
+  }
+
+  const handleOpen = async () => {
+    setOpen(true);
   };
-  if (cartData !== null) {
-    currentCart = JSON.parse(cartData);
-    cartItems = currentCart.cartItems;
-  }
 
-  async function postCartItems(userId: string) {
-    cartItems.map(async (item) => {
-      await fetch(`${url}/cart_items`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: `${config.SUPABASE_ANON_KEY}`,
-          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify({
-          cart_id: Number(userId),
-          item_id: item.id,
-          quantity: item.quantity,
-          name: item.name,
-          price: item.price,
-          image_url: item.image_url,
-        }),
-      }).catch((error) => {
-        console.error(error);
-        return;
-      });
-      alert("データをcart_itemsへ保存しました");
-    });
-  }
-
-  async function postCart(userId: string) {
-    await fetch(`${url}/carts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        apikey: `${config.SUPABASE_ANON_KEY}`,
-        Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
-      },
-      body: JSON.stringify({
-        user_id: Number(userId),
-        total_count: currentCart.total_count,
-        tax: currentCart.tax,
-        sub_amount: currentCart.sub_amount,
-        total_amount: currentCart.total_amount,
-      }),
-    }).catch((error) => {
-      console.error(error);
-      return;
-    });
-    alert("データをcartsテーブルに保存しました");
-  }
-
-  const handleClick = async () => {
-    if (userId === undefined || userId === null) {
-      navigate("/login");
-    } else {
-      await postCartItems(userId);
-      await postCart(userId);
-      navigate("/confirm_order");
-    }
-  };
+  const handleClose = () => setOpen(false);
 
   return (
     <>
-      <IconButton aria-label="cart" onClick={handleClick}>
+      <IconButton aria-label="cart" onClick={handleOpen}>
         {cartItems.length === 0 ? (
           <StyledBadge badgeContent={0} color="secondary">
             <ShoppingCartIcon />
@@ -108,6 +47,18 @@ export default function CartIcon() {
           </StyledBadge>
         )}
       </IconButton>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="shoppincart-modal"
+        aria-describedby="shoppingcart-modal"
+        key={"modal"}
+        sx={{
+          overflowX: "scroll",
+        }}
+      >
+        <ModalContent onClose={handleClose} cartData={cartData} />
+      </Modal>
     </>
   );
 }

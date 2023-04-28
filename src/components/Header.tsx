@@ -181,12 +181,9 @@ export function Header() {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {userData === undefined ? (
-                  <Avatar alt="unknown user" src="/images/default_user_icon" />
+                  <Avatar alt="未ログイン状態のアイコン" />
                 ) : (
-                  <Avatar
-                    alt={`${userData[0].name}`}
-                    src="/images/default_user_icon"
-                  />
+                  <Avatar src="/images/default_user_icon.png" />
                 )}
               </IconButton>
             </Tooltip>

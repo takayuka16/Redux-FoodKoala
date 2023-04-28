@@ -2,7 +2,7 @@ import { Box, Paper, Container, Typography } from "@mui/material";
 import PlaceIcon from "@mui/icons-material/Place";
 import { useGetOrderHisorieQuery } from "../api/apiSlice";
 import Cookies from "js-cookie";
-import OrderItemsList from "../../components/order/OrderItemsList";
+import OrderedItemsList from "../../components/order/OrderedItemsList";
 
 export default function OrderCompleted() {
   const userId = Cookies.get("user_id");
@@ -25,7 +25,7 @@ export default function OrderCompleted() {
           ご注文ありがとうございました!
         </Typography>
         <Box sx={{ my: 2 }}>
-          <OrderItemsList ordercode={orderHistory[0].ordercode} />
+          <OrderedItemsList ordercode={orderHistory[0].ordercode} />
           <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
             <PlaceIcon />
             <Typography>お店へのアクセスはこちら</Typography>

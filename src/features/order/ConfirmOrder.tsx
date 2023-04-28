@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useGetCartItemsByIdQuery } from "../api/apiSlice";
 import { useGetCartByIdQuery } from "../api/apiSlice";
-import CartItemsList from "../../components/cart/CartItemsList";
 import { Box, Container } from "@mui/material";
 import Payment from "../../components/order/Payment";
-import CouponList from "../../components/order/CouponList";
 import { Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import { useAddNewOrderItemsMutation } from "../api/apiSlice";
 import { useAddNewOrderMutation } from "../api/apiSlice";
 import { CartItems } from "../../types/cartItems.type";
-import Divider from "@mui/material/Divider/Divider";
 import { useNavigate } from "react-router-dom";
+import ConfirmOrderList from "../../components/order/ConfirmOrderList";
+import { useSelector } from "react-redux";
+import { LocalCart } from "../../types/cart.type";
 
 export default function ConfirmOrder() {
   const navigate = useNavigate();
@@ -34,6 +34,8 @@ export default function ConfirmOrder() {
     isError: isCartError,
     error: cartError,
   } = useGetCartByIdQuery(userId);
+
+  const currentCart = useSelector<any, LocalCart>((state) => state.cart);
 
   const [addNewOrder, { isLoading: isOrderLoading, isError: isOrderError }] =
     useAddNewOrderMutation();
@@ -80,21 +82,21 @@ export default function ConfirmOrder() {
     await addNewOrder({
       user_id: Number(userId),
       payment_method: cartData[0].payment_method,
-      discount: cartData[0].discount,
+      discount: currentCart.discount_amount,
       couponcode: cartData[0].couponcode,
       ordered_at: ordered_at,
-      sub_amount: cartData[0].sub_amount,
+      sub_amount: currentCart.sub_amount,
       ordercode: ordercode,
-      total_amount: cartData[0].total_amount,
-      tax: cartData[0].tax,
-      total_count: cartData[0].total_count,
+      total_amount: currentCart.total_amount,
+      tax: currentCart.tax,
+      total_count: currentCart.total_count,
     });
 
-    await cartItems.map((item: CartItems) =>
+    await cartItems.map((item: CartItems, index: number) =>
       addNewOrderItems({
         shop_id: item.shop_id,
         price: item.price,
-        quantity: item.quantity,
+        quantity: currentCart.cartItems[index].quantity,
         ordercode: ordercode,
         image_url: item.image_url,
         name: item.name,
@@ -113,8 +115,6 @@ export default function ConfirmOrder() {
   if (isLoading || isCartLoading) {
     content = <div>Loading now...</div>;
   } else if (isSuccess && isCartSuccess) {
-    const coupon = (cartData[0].sub_amount * cartData[0].discount) / 100;
-
     content = (
       <Container
         maxWidth="lg"
@@ -135,39 +135,7 @@ export default function ConfirmOrder() {
             padding: 3,
           }}
         >
-          <CartItemsList
-            cartItems={cartItems}
-            currentCart={{
-              cartItems: cartItems,
-              total_count: cartData[0].total_count,
-              tax: cartData[0].tax,
-              sub_amount: cartData[0].sub_amount,
-              total_amount: cartData[0].total_amount,
-            }}
-          />
-          <CouponList />
-          <Typography
-            component="div"
-            variant="body1"
-            sx={{ textAlign: "right", mt: 1, color: "red" }}
-          >
-            お値引き: -{coupon}円
-          </Typography>
-          <Typography
-            component="div"
-            variant="body1"
-            sx={{ textAlign: "right", mt: 1 }}
-          >
-            消費税: {cartData[0].tax}円
-          </Typography>
-          <Divider sx={{ mt: 2 }} />
-          <Typography
-            component="p"
-            variant="h6"
-            sx={{ textAlign: "right", mb: 1, mt: 2 }}
-          >
-            合計：{cartData[0].total_amount - coupon}円
-          </Typography>
+          <ConfirmOrderList userId={userId} />
         </Box>
         <Box
           sx={{

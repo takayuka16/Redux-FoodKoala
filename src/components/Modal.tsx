@@ -8,10 +8,11 @@ import {
   calculateTax,
   gettotal_amount,
 } from "../features/cart/CartSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { Menu } from "../types/menus.type";
 import ModalContent from "./ModalContent";
 import { Modal } from "@mui/material";
+import { persistor } from "../app/store";
 
 export default function CartModal({
   item,
@@ -22,9 +23,11 @@ export default function CartModal({
 }) {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-  const cartData = localStorage.getItem("redux_localstorage_simple_cart");
+  const cartData = useSelector<any>((state) => state.cart);
+  console.log(cartData);
 
   const handleOpen = () => {
+    // persistor.purge();
     dispatch(
       addCartItem({
         id: item.id,

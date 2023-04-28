@@ -7,8 +7,10 @@ const useCartSlice = createSlice({
   initialState: {
     cartItems: [],
     total_count: 0,
-    tax: 0,
     sub_amount: 0,
+    discount: 0,
+    discount_amount: 0,
+    tax: 0,
     total_amount: 0,
   } as LocalCart,
 
@@ -64,17 +66,23 @@ const useCartSlice = createSlice({
         state.cartItems[index].quantity -= 1;
       }
     },
+    editDiscount: (state, action) => {
+      state.discount = action.payload;
+    },
+    getDiscount_amount: (state, action) => {
+      state.discount_amount = (state.sub_amount * state.discount) / 100;
+    },
     calculateTax: (state, action) => {
-      let totalTax = (10 / 100) * state.sub_amount;
+      let totalTax = (10 / 100) * (state.sub_amount - state.discount_amount);
       state.tax = totalTax;
     },
     gettotal_amount: (state, action) => {
-      state.total_amount = state.sub_amount + state.tax;
+      state.total_amount = state.sub_amount - state.discount_amount + state.tax;
     },
   },
 });
 
-const cartsAdapter = createEntityAdapter();
+const cartsAdapter = createEntityAdapter<LocalCart>();
 
 export const {
   addCartItem,
@@ -86,10 +94,12 @@ export const {
   decrement,
   calculateTax,
   gettotal_amount,
+  editDiscount,
+  getDiscount_amount,
 } = useCartSlice.actions;
 export default useCartSlice.reducer;
 
 export const {
   selectAll: selectCartsData,
   selectEntities: selectCartEntities,
-} = cartsAdapter.getSelectors((state: any) => state.cart);
+} = cartsAdapter.getSelectors<any>((state) => state.cart);

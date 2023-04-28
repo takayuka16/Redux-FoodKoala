@@ -20,10 +20,12 @@ export default function ModalContent({ onClose, cartData }: any) {
     tax: 0,
     sub_amount: 0,
     total_amount: 0,
+    discount: 0,
+    discount_amount: 0,
   };
-  if (cartData !== null) {
-    currentCart = JSON.parse(cartData);
-    cartItems = currentCart.cartItems;
+  if (cartData) {
+    currentCart = cartData;
+    cartItems = cartData.cartItems;
   }
 
   async function postCartItems(userId: string) {
@@ -48,7 +50,6 @@ export default function ModalContent({ onClose, cartData }: any) {
         console.error(error);
         return;
       });
-      alert("データをcart_itemsへ保存しました");
     });
   }
 
@@ -71,7 +72,6 @@ export default function ModalContent({ onClose, cartData }: any) {
       console.error(error);
       return;
     });
-    alert("データをcartsテーブルに保存しました");
   }
 
   const handleClick = async () => {

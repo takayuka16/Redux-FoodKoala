@@ -4,7 +4,7 @@ import { OrderItems } from "../../types/orderItems.type";
 import Avatar from "@mui/material/Avatar";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 
-export default function OrderItemsList({ ordercode }: { ordercode: string }) {
+export default function OrderedItemsList({ ordercode }: { ordercode: string }) {
   const {
     data: orderItems,
     isLoading,

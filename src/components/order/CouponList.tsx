@@ -8,10 +8,28 @@ import { useGetCouponByIdQuery } from "../../features/api/apiSlice";
 import Cookies from "js-cookie";
 import { Coupon } from "../../types/coupon.type";
 import { useEditCouponMutation } from "../../features/api/apiSlice";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider/Divider";
+import { useDispatch } from "react-redux";
+import {
+  getDiscount_amount,
+  gettotal_amount,
+  calculateTax,
+  editDiscount,
+} from "../../features/cart/CartSlice";
 
-export default function CouponList() {
+export default function CouponList({
+  discountAmount,
+  tax,
+  totalAmount,
+}: {
+  discountAmount: number;
+  tax: number;
+  totalAmount: number;
+}) {
   const [couponIndex, setCouponIndex] = React.useState("");
   const userId = Cookies.get("user_id");
+  const dispatch = useDispatch();
   const {
     data: coupon,
     isLoading,
@@ -24,13 +42,18 @@ export default function CouponList() {
 
   const handleChange = (event: SelectChangeEvent) => {
     const couponIndex = event.target.value as string;
+    const discount = coupon[couponIndex].discount;
     console.log("coupon", couponIndex);
     setCouponIndex(couponIndex);
     updateCoupon({
       userId: userId,
-      discount: coupon[couponIndex].discount,
+      discount: discount,
       couponcode: coupon[couponIndex].couponcode,
     });
+    dispatch(editDiscount(discount));
+    dispatch(getDiscount_amount(""));
+    dispatch(calculateTax(""));
+    dispatch(gettotal_amount(""));
   };
 
   let content;
@@ -39,22 +62,46 @@ export default function CouponList() {
     content = <div>Loading now...</div>;
   } else if (isSuccess) {
     content = (
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">クーポンを選択</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={couponIndex}
-          label="クーポンを選択"
-          onChange={handleChange}
+      <>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">クーポンを選択</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={couponIndex}
+            label="クーポンを選択"
+            onChange={handleChange}
+          >
+            {coupon.map((coupon: Coupon, index: number) => (
+              <MenuItem value={index} key={index}>
+                {coupon.couponcode}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Typography
+          component="div"
+          variant="body1"
+          sx={{ textAlign: "right", mt: 1, color: "red" }}
         >
-          {coupon.map((coupon: Coupon, index: number) => (
-            <MenuItem value={index} key={index}>
-              {coupon.couponcode}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          お値引き: -{discountAmount}円
+        </Typography>
+        <Typography
+          component="div"
+          variant="body1"
+          sx={{ textAlign: "right", mt: 1 }}
+        >
+          消費税: {tax}円
+        </Typography>
+        <Divider sx={{ mt: 2 }} />
+        <Typography
+          component="p"
+          variant="h6"
+          sx={{ textAlign: "right", mb: 1, mt: 2 }}
+        >
+          合計：{totalAmount}円
+        </Typography>
+      </>
     );
   } else if (isError) {
     content = <div>{error.toString()}</div>;

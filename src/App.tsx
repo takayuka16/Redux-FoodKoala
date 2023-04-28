@@ -14,6 +14,7 @@ import Concept from "./features/concept/Concept";
 import OrderHistoryList from "./features/order/OrderHistory";
 import ConfirmOrder from "./features/order/ConfirmOrder";
 import OrderCompleted from "./features/order/OrderCompleted";
+import Stripe from "./features/Stripe";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/signUp" element={<SignUp />} />
             <Route path="/concept" element={<Concept />} />
             <Route path="/inquiry_form" element={<InquiryForm />} />
+            <Route path="/checkout" element={<Stripe />} />
           </Route>
         </Routes>
       </div>

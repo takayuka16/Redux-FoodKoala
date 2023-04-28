@@ -3,7 +3,14 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar/Avatar";
-import { increment, decrement } from "../../features/cart/CartSlice";
+import {
+  increment,
+  decrement,
+  getSubTotal,
+  gettotal_amount,
+  getCartCount,
+  calculateTax,
+} from "../../features/cart/CartSlice";
 import { removeCartItem } from "../../features/cart/CartSlice";
 import Divider from "@mui/material/Divider/Divider";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
@@ -88,14 +95,26 @@ export default function CartItemsList({
                 <IconButton
                   color="inherit"
                   size="small"
-                  onClick={() => dispatch(increment(item))}
+                  onClick={() => {
+                    dispatch(increment(item));
+                    dispatch(getCartCount(""));
+                    dispatch(getSubTotal(""));
+                    dispatch(calculateTax(""));
+                    dispatch(gettotal_amount(""));
+                  }}
                 >
                   <ArrowDropUpIcon fontSize="inherit" />
                 </IconButton>
                 <IconButton
                   color="inherit"
                   size="small"
-                  onClick={() => dispatch(decrement(item))}
+                  onClick={() => {
+                    dispatch(decrement(item));
+                    dispatch(getCartCount(""));
+                    dispatch(getSubTotal(""));
+                    dispatch(calculateTax(""));
+                    dispatch(gettotal_amount(""));
+                  }}
                 >
                   <ArrowDropDownIcon fontSize="inherit" />
                 </IconButton>
@@ -105,7 +124,13 @@ export default function CartItemsList({
               <Button
                 variant="contained"
                 color="inherit"
-                onClick={() => dispatch(removeCartItem(item))}
+                onClick={() => {
+                  dispatch(removeCartItem(item));
+                  dispatch(getCartCount(""));
+                  dispatch(getSubTotal(""));
+                  dispatch(calculateTax(""));
+                  dispatch(gettotal_amount(""));
+                }}
                 key={`delete-${item.id}`}
               >
                 削除

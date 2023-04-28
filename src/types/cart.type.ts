@@ -5,6 +5,8 @@ type LocalCart = {
   total_count: number;
   tax: number;
   sub_amount: number;
+  discount: number;
+  discount_amount: number;
   total_amount: number;
 };
 
