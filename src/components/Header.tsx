@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import { config } from "../apikey";
 import type { User } from "../types/users.type";
-import CartIcon from "./CartIcon";
+import CartIcon from "./cart/CartIcon";
 
 const pages = [
   { name: "メニュー", path: "/items" },
@@ -111,7 +111,7 @@ export function Header() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              color="warning"
             >
               <MenuIcon />
             </IconButton>
@@ -181,12 +181,9 @@ export function Header() {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {userData === undefined ? (
-                  <Avatar alt="unknown user" src="/images/default_user_icon" />
+                  <Avatar alt="未ログイン状態のアイコン" />
                 ) : (
-                  <Avatar
-                    alt={`${userData[0].name}`}
-                    src="/static/images/avatar/2.jpg"
-                  />
+                  <Avatar src="/images/default_user_icon.png" />
                 )}
               </IconButton>
             </Tooltip>

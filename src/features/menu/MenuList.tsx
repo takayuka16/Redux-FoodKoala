@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useGetMenusQuery } from "../api/apiSlice";
-import MenuCard from "../../components/MenuCard";
+import MenuCard from "../../components/menu/MenuCard";
 import { Menu } from "../../types/menus.type";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query/fetchBaseQuery";
 import { SerializedError } from "@reduxjs/toolkit/dist/createAsyncThunk";
@@ -10,7 +10,7 @@ export const MenuList = () => {
   const [page, setPage] = React.useState(0);
   const {
     data: menus = [],
-    isLoading,
+    isLoading: isMenuLoading,
     isSuccess,
     isError,
     error,
@@ -26,7 +26,7 @@ export const MenuList = () => {
 
   let content;
 
-  if (isLoading) {
+  if (isMenuLoading) {
     content = <div>Loading now...</div>;
   } else if (isSuccess) {
     let pagingData;

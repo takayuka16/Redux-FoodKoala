@@ -1,6 +1,6 @@
 import React from "react";
 import { useGetShopsQuery } from "../api/apiSlice";
-import ShopCard from "../../components/ShopCard";
+import ShopCard from "../../components/shop/ShopCard";
 import { Pagination } from "@mui/material";
 
 export const ShopList = () => {

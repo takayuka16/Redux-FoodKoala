@@ -7,7 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Shop } from "../types/shops.type";
+import { Shop } from "../../types/shops.type";
 import { Link } from "react-router-dom";
 import ShopTop3Menu from "./Shop_top3_menu";
 

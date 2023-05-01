@@ -8,10 +8,13 @@ import { InquiryForm } from "./features/InquiryForm";
 import SingleMenuPage from "./features/menu/SingleMenuPage";
 import Navigation from "./components/Nav";
 import { SingleShopPage } from "./features/shop/SingleShopPage";
-import Signup from "./features/SignUp";
+import SignUp from "./features/SignUp";
 import Login from "./features/Login";
 import Concept from "./features/concept/Concept";
 import OrderHistoryList from "./features/order/OrderHistory";
+import ConfirmOrder from "./features/order/ConfirmOrder";
+import OrderCompleted from "./features/order/OrderCompleted";
+import Stripe from "./features/Stripe";
 
 function App() {
   return (
@@ -28,11 +31,14 @@ function App() {
               <Route path=":shopId" element={<SingleShopPage />} />
             </Route>
             <Route path="/favorites" element={<FavoriteShopList />} />
+            <Route path="/confirm_order" element={<ConfirmOrder />} />
+            <Route path="/order_completed" element={<OrderCompleted />} />
             <Route path="/order_history" element={<OrderHistoryList />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/signUp" element={<Signup />} />
+            <Route path="/signUp" element={<SignUp />} />
             <Route path="/concept" element={<Concept />} />
             <Route path="/inquiry_form" element={<InquiryForm />} />
+            <Route path="/checkout" element={<Stripe />} />
           </Route>
         </Routes>
       </div>

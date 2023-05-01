@@ -81,12 +81,11 @@ export default function SignUp() {
     phone_number: "",
     password: "",
   });
-  const [confirmPassword, setComfirmPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState(false);
   const [confirmPasswordMessage, setConfirmPasswordMessage] =
     React.useState("");
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
@@ -124,8 +123,10 @@ export default function SignUp() {
   const checkPassword = (confirmPassword: string) => {
     if (values.password === confirmPassword) {
       setConfirmPasswordMessage("");
+      setConfirmPassword(false);
     } else {
       setConfirmPasswordMessage("確認用パスワードが間違っています");
+      setConfirmPassword(true);
     }
   };
 
@@ -182,7 +183,6 @@ export default function SignUp() {
                   fullWidth
                   error={!!errors.name}
                   helperText={errors.name?.message}
-                  inputRef={register}
                   id="name"
                   label="氏名"
                   autoFocus
@@ -196,7 +196,6 @@ export default function SignUp() {
                   fullWidth
                   error={!!errors.email}
                   helperText={errors.email?.message}
-                  inputRef={register}
                   id="email"
                   label="メールアドレス"
                   name="email"
@@ -211,7 +210,6 @@ export default function SignUp() {
                   name="zipcode"
                   error={!!errors.zipcode}
                   helperText={errors.zipcode?.message}
-                  inputRef={register}
                   value={values.zipcode}
                   label="郵便番号(ハイフン不要)"
                   id="zipcode"
@@ -232,7 +230,6 @@ export default function SignUp() {
                   fullWidth
                   error={!!errors.address}
                   helperText={errors.address?.message}
-                  inputRef={register}
                   name="address"
                   value={values.address}
                   label="住所"
@@ -247,7 +244,6 @@ export default function SignUp() {
                   fullWidth
                   error={!!errors.phone_number}
                   helperText={errors.phone_number?.message}
-                  inputRef={register}
                   name="phone_number"
                   value={values.phone_number}
                   type="tel"
@@ -263,7 +259,6 @@ export default function SignUp() {
                   fullWidth
                   error={!!errors.password}
                   helperText={errors.password?.message}
-                  inputRef={register}
                   name="password"
                   value={values.password}
                   label="パスワード"
@@ -277,15 +272,13 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  error={!confirmPassword}
+                  error={confirmPassword}
                   helperText={confirmPasswordMessage}
                   name="confirmed_password"
-                  value={confirmPassword}
                   label="確認用パスワード"
                   type="password"
                   id="confirmed_password"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setComfirmPassword(e.currentTarget.value);
                     checkPassword(e.currentTarget.value);
                   }}
                 />

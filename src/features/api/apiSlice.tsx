@@ -57,7 +57,7 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    getOrderHisories: builder.query({
+    getOrderHisorie: builder.query({
       query: (userId) => ({
         url: `/order_history?user_id=eq.${userId}`,
         method: "GET",
@@ -65,6 +65,95 @@ export const apiSlice = createApi({
           apikey: `${config.SUPABASE_ANON_KEY}`,
           Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
         },
+      }),
+    }),
+    getOrderItems: builder.query({
+      query: (ordercode) => ({
+        url: `/order_items?ordercode=eq.${ordercode}`,
+        method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
+    getCartItemsById: builder.query({
+      query: (userId) => ({
+        url: `/cart_items?cart_id=eq.${userId}`,
+        method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
+    getCartById: builder.query({
+      query: (userId) => ({
+        url: `/carts?user_id=eq.${userId}`,
+        method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
+    editPayment: builder.mutation({
+      query: ({ userId, payment }) => ({
+        url: `/carts?user_id=eq.${userId}`,
+        method: "PATCH",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+        body: {
+          payment_method: payment,
+        },
+      }),
+    }),
+    getCouponById: builder.query({
+      query: (userId) => ({
+        url: `/coupon?user_id=eq.${userId}`,
+        method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
+    editCoupon: builder.mutation({
+      query: ({ userId, discount, couponcode }) => ({
+        url: `/carts?user_id=eq.${userId}`,
+        method: "PATCH",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+        body: {
+          discount: discount,
+          couponcode: couponcode,
+        },
+      }),
+    }),
+    addNewOrder: builder.mutation({
+      query: (order) => ({
+        url: `/order_history`,
+        method: "POST",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+        body: order,
+      }),
+    }),
+    addNewOrderItems: builder.mutation({
+      query: (orderItems) => ({
+        url: "/order_items",
+        method: "POST",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+        body: orderItems,
       }),
     }),
   }),
@@ -76,5 +165,13 @@ export const {
   useGetMenuByShopIdQuery,
   useGetShopsQuery,
   useGetShopByIdQuery,
-  useGetOrderHisoriesQuery,
+  useGetOrderHisorieQuery,
+  useGetOrderItemsQuery,
+  useGetCartItemsByIdQuery,
+  useGetCartByIdQuery,
+  useEditPaymentMutation,
+  useGetCouponByIdQuery,
+  useEditCouponMutation,
+  useAddNewOrderMutation,
+  useAddNewOrderItemsMutation,
 } = apiSlice;
