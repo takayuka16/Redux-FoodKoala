@@ -84,14 +84,14 @@ export default function CouponList({
           variant="body1"
           sx={{ textAlign: "right", mt: 1, color: "red" }}
         >
-          お値引き: -{discountAmount}円
+          お値引き: -{Math.floor(discountAmount)}円
         </Typography>
         <Typography
           component="div"
           variant="body1"
           sx={{ textAlign: "right", mt: 1 }}
         >
-          消費税: {tax}円
+          消費税: {Math.floor(tax)}円
         </Typography>
         <Divider sx={{ mt: 2 }} />
         <Typography
@@ -99,7 +99,7 @@ export default function CouponList({
           variant="h6"
           sx={{ textAlign: "right", mb: 1, mt: 2 }}
         >
-          合計：{totalAmount}円
+          合計：{Math.floor(totalAmount)}円
         </Typography>
       </>
     );

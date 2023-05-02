@@ -57,7 +57,7 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    getOrderHisorie: builder.query({
+    getOrderHisories: builder.query({
       query: (userId) => ({
         url: `/order_history?user_id=eq.${userId}`,
         method: "GET",
@@ -69,7 +69,7 @@ export const apiSlice = createApi({
     }),
     getOrderItems: builder.query({
       query: (ordercode) => ({
-        url: `/order_items?ordercode=eq.${ordercode}`,
+        url: `/order_items?order_code=eq.${ordercode}`,
         method: "GET",
         headers: {
           apikey: `${config.SUPABASE_ANON_KEY}`,
@@ -87,10 +87,30 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    deleteCartItems: builder.mutation({
+      query: (userId) => ({
+        url: `/cart_items?cart_id=eq.${userId}`,
+        method: "DELETE",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
     getCartById: builder.query({
       query: (userId) => ({
         url: `/carts?user_id=eq.${userId}`,
         method: "GET",
+        headers: {
+          apikey: `${config.SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+        },
+      }),
+    }),
+    deleteCart: builder.mutation({
+      query: (userId) => ({
+        url: `/carts?user_id=eq.${userId}`,
+        method: "DELETE",
         headers: {
           apikey: `${config.SUPABASE_ANON_KEY}`,
           Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
@@ -165,10 +185,12 @@ export const {
   useGetMenuByShopIdQuery,
   useGetShopsQuery,
   useGetShopByIdQuery,
-  useGetOrderHisorieQuery,
+  useGetOrderHisoriesQuery,
   useGetOrderItemsQuery,
   useGetCartItemsByIdQuery,
+  useDeleteCartItemsMutation,
   useGetCartByIdQuery,
+  useDeleteCartMutation,
   useEditPaymentMutation,
   useGetCouponByIdQuery,
   useEditCouponMutation,

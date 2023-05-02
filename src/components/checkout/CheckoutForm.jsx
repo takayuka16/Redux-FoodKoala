@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
   PaymentElement,
-  LinkAuthenticationElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
 import styles from "../../styles/Stripe.module.css";
+import { config } from "../../apikey";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
+  const url = config.LOCALHOST_URL;
 
-  const [email, setEmail] = useState("");
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -58,7 +58,7 @@ export default function CheckoutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:3000/items",
+        return_url: `${url}/order_sending`,
       },
     });
 
@@ -77,10 +77,6 @@ export default function CheckoutForm() {
 
   return (
     <form id="payment-form" className={styles.form} onSubmit={handleSubmit}>
-      <LinkAuthenticationElement
-        id="link-authentication-element"
-        onChange={(e) => setEmail(e.target.value)}
-      />
       <PaymentElement
         id="payment-element"
         className={styles.payment_element}
@@ -95,7 +91,7 @@ export default function CheckoutForm() {
           {isLoading ? (
             <div className={styles.spinner} id="spinner"></div>
           ) : (
-            "Pay now"
+            "注文を確定する"
           )}
         </span>
       </button>

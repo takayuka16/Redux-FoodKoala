@@ -1,6 +1,6 @@
 import { Box, Paper, Container, Typography } from "@mui/material";
 import PlaceIcon from "@mui/icons-material/Place";
-import { useGetOrderHisorieQuery } from "../api/apiSlice";
+import { useGetOrderHisoriesQuery } from "../api/apiSlice";
 import Cookies from "js-cookie";
 import OrderedItemsList from "../../components/order/OrderedItemsList";
 
@@ -12,20 +12,23 @@ export default function OrderCompleted() {
     isSuccess,
     isError,
     error,
-  } = useGetOrderHisorieQuery(userId);
+  } = useGetOrderHisoriesQuery(userId);
 
   let content;
 
   if (isLoading) {
     content = <div>Loading now...</div>;
   } else if (isSuccess) {
+    const historyLength = orderHistory.length;
     content = (
       <>
         <Typography component="h1" variant="h5" sx={{ textAlign: "center" }}>
           ご注文ありがとうございました!
         </Typography>
         <Box sx={{ my: 2 }}>
-          <OrderedItemsList ordercode={orderHistory[0].ordercode} />
+          <OrderedItemsList
+            ordercode={orderHistory[historyLength - 1].order_code}
+          />
           <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
             <PlaceIcon />
             <Typography>お店へのアクセスはこちら</Typography>

@@ -14,7 +14,7 @@ import Concept from "./features/concept/Concept";
 import OrderHistoryList from "./features/order/OrderHistory";
 import ConfirmOrder from "./features/order/ConfirmOrder";
 import OrderCompleted from "./features/order/OrderCompleted";
-import Stripe from "./features/Stripe";
+import OrderSending from "./features/order/OrderSending";
 
 function App() {
   return (
@@ -32,13 +32,13 @@ function App() {
             </Route>
             <Route path="/favorites" element={<FavoriteShopList />} />
             <Route path="/confirm_order" element={<ConfirmOrder />} />
+            <Route path="/order_sending" element={<OrderSending />} />
             <Route path="/order_completed" element={<OrderCompleted />} />
             <Route path="/order_history" element={<OrderHistoryList />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signUp" element={<SignUp />} />
             <Route path="/concept" element={<Concept />} />
             <Route path="/inquiry_form" element={<InquiryForm />} />
-            <Route path="/checkout" element={<Stripe />} />
           </Route>
         </Routes>
       </div>

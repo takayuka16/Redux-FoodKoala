@@ -1,24 +1,22 @@
 const express = require("express");
-const cors = require("cors");
 const app = express();
-const port = 4242;
-
-const stripe = require("stripe")("sk_test_09l3shTSTKHYCzzZZsiLl2vA");
+// This is your test secret API key.
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 app.use(express.static("public"));
 app.use(express.json());
-app.use(cors());
 
 const calculateOrderAmount = (items) => {
+  // Replace this constant with a calculation of the order's amount
+  // Calculate the order total on the server to prevent
+  // people from directly manipulating the amount on the client
   return 1400;
 };
 
-app.get("/", async (req, res) => {
-  res.end("server is function");
-});
-
 app.post("/create-payment-intent", async (req, res) => {
   const { items } = req.body;
+
+  // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
     amount: calculateOrderAmount(items),
     currency: "jpy",
@@ -26,10 +24,10 @@ app.post("/create-payment-intent", async (req, res) => {
       enabled: true,
     },
   });
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+
   res.send({
     clientSecret: paymentIntent.client_secret,
   });
 });
 
-app.listen(port, () => console.log(`Node server listening on port ${port}`));
+app.listen(4242, () => console.log("Node server listening on port 4242!"));
