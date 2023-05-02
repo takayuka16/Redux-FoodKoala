@@ -7,8 +7,12 @@ import { config } from "../apikey";
 import { CartItems } from "../types/cartItems.type";
 import type { LocalCart } from "../types/cart.type";
 import CartItemsList from "./cart/CartItemsList";
+import { forwardRef } from "react";
 
-export default function ModalContent({ onClose, cartData }: any) {
+const ModalContent = forwardRef(function ModalContent(
+  { onClose, cartData }: any,
+  ref
+) {
   const navigate = useNavigate();
   const url = config.SUPABASE_URL;
   const userId = Cookies.get("user_id");
@@ -64,9 +68,9 @@ export default function ModalContent({ onClose, cartData }: any) {
       body: JSON.stringify({
         user_id: Number(userId),
         total_count: currentCart.total_count,
-        tax: currentCart.tax,
-        sub_amount: currentCart.sub_amount,
-        total_amount: currentCart.total_amount,
+        tax: Math.floor(currentCart.tax),
+        sub_amount: Math.floor(currentCart.sub_amount),
+        total_amount: Math.floor(currentCart.total_amount),
       }),
     }).catch((error) => {
       console.error(error);
@@ -110,4 +114,6 @@ export default function ModalContent({ onClose, cartData }: any) {
       </Button>
     </Box>
   );
-}
+});
+
+export default ModalContent;

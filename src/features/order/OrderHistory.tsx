@@ -7,7 +7,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { useGetOrderHisorieQuery } from "../api/apiSlice";
+import { useGetOrderHisoriesQuery } from "../api/apiSlice";
 import Cookies from "js-cookie";
 import type { OrderHistory } from "../../types/orderHistory.type";
 import { Container } from "@mui/material";
@@ -21,7 +21,7 @@ export default function OrderHistoryList() {
     isSuccess,
     isError,
     error,
-  } = useGetOrderHisorieQuery(userId);
+  } = useGetOrderHisoriesQuery(userId);
 
   React.useEffect(() => {
     if (Cookies.get("user_id") === undefined || null) {

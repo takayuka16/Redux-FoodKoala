@@ -22,11 +22,13 @@ export default function CartIcon() {
   const [open, setOpen] = React.useState(false);
   const cartData = useSelector<any, LocalCart>((state) => state.cart);
 
-  let cartItems: CartItems[] = [];
+  let cartItems = React.useRef<CartItems[]>([]);
 
-  if (cartData) {
-    cartItems = cartData.cartItems;
-  }
+  React.useEffect(() => {
+    if (cartData) {
+      cartItems.current = cartData.cartItems;
+    }
+  }, [cartData]);
 
   const handleOpen = async () => {
     setOpen(true);
@@ -37,12 +39,15 @@ export default function CartIcon() {
   return (
     <>
       <IconButton aria-label="cart" onClick={handleOpen}>
-        {cartItems.length === 0 ? (
+        {cartItems.current.length === 0 ? (
           <StyledBadge badgeContent={0} color="secondary">
             <ShoppingCartIcon />
           </StyledBadge>
         ) : (
-          <StyledBadge badgeContent={cartItems.length} color="secondary">
+          <StyledBadge
+            badgeContent={cartItems.current.length}
+            color="secondary"
+          >
             <ShoppingCartIcon />
           </StyledBadge>
         )}

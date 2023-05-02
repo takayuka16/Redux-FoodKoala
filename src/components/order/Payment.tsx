@@ -7,9 +7,10 @@ import FormLabel from "@mui/material/FormLabel";
 import { Box } from "@mui/joy";
 import { useEditPaymentMutation } from "../../features/api/apiSlice";
 import Cookies from "js-cookie";
-import Stripe from "../../features/Stripe";
+import Stripe from "../checkout/Stripe";
+import { Button } from "@mui/material";
 
-export default function Payment() {
+export default function Payment({ onClick }: any) {
   const userId = Cookies.get("user_id");
   const [value, setValue] = React.useState("現金");
   const [updatePayment] = useEditPaymentMutation();
@@ -32,7 +33,7 @@ export default function Payment() {
           padding: 2,
         }}
       >
-        <FormControl>
+        <FormControl fullWidth>
           <FormLabel id="demo-controlled-radio-buttons-group">
             お支払い方法
           </FormLabel>
@@ -49,7 +50,19 @@ export default function Payment() {
               label="クレジットカード"
             />
           </RadioGroup>
-          {/* <Stripe /> */}
+          {value === "クレジットカード" ? (
+            <Stripe />
+          ) : (
+            <Button
+              variant="contained"
+              fullWidth
+              color="inherit"
+              onClick={onClick}
+              sx={{ my: 3 }}
+            >
+              注文を確定する
+            </Button>
+          )}
         </FormControl>
       </Box>
     </>

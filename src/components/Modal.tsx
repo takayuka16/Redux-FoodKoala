@@ -24,7 +24,6 @@ export default function CartModal({
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const cartData = useSelector<any>((state) => state.cart);
-  console.log(cartData);
 
   const handleOpen = () => {
     // persistor.purge();
